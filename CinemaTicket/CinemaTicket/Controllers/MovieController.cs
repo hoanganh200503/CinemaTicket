@@ -57,7 +57,7 @@ namespace CinemaTicket.Controllers
         {
             if (ModelState.IsValid)
             {
-                movie.Language = movie.enumLanguage.ToString();
+                movie.Language = movie.enumLanguage.ToString();// chuyển giá trị enum sang string để lưu vào db
                 _context.Add(movie);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -92,14 +92,28 @@ namespace CinemaTicket.Controllers
             {
                 return NotFound();
             }
+            var movieUpdate = await _context.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.MovieID == id); // Dùng AsNoTracking() để không bị lỗi khi update CreateAt vì Entity framwork sẽ không cố gắng cập nhật tất cả các trường    
+            if (movie == null)
+            {
+                return NotFound();
+            }
 
+
+            // 1. Gán các giá trị cần cập nhật từ movie vào movie
+            movieUpdate.Title = movie.Title;
+            movieUpdate.Duration = movie.Duration;
+            movieUpdate.Language = movie.enumLanguage.ToString();
+            movieUpdate.ReleaseDate = movie.ReleaseDate;
+            movieUpdate.Description = movie.Description;
+            movieUpdate.UpdatedAt = DateTime.Now; // Cập nhật UpdatedAt
+
+            _context.Update(movieUpdate);
             if (ModelState.IsValid)
             {
                 try
                 {
-                    movie.Language = movie.enumLanguage.ToString();
-                    _context.Update(movie);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
