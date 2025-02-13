@@ -1,0 +1,79 @@
+﻿@model IEnumerable<CinemaTicketApp.Models.Movie> // link để sử dụng data movie
+
+@{
+    ViewData["Title"] = "Movie List";
+}
+
+<h1>MOVIE LIST</h1>
+
+<p>
+    <a asp-action="Create">Create New</a> <!--nút để thêm movie mới-->
+</p>
+<!--bảng hiển thị danh sách movie-->
+<table class="table"> 
+<!--Lấy tên thuộc tính-->
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+                <!--@Html là đối tượng helper-->
+                <!--.DisplayNameFor() để Hiển thị tên thuộc tính -->
+                <!--model => model.Title biểu thức lamda lấy tên biến từ Model có thể thay đổi bằng [DisplayName("Here")]-->
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Language)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpdatedAt)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <!--Lấy dữ liệu-->
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+                    <!--.DisplayFor() để Hiển thị thuộc tính -->
+                    <!--modelItem => item.Title biểu thức lamda lấy dữ liệu -->
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Language)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UpdatedAt)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MovieID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MovieID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MovieID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
