@@ -1,4 +1,4 @@
-﻿using CinemaTicketApp.Data;
+using CinemaTicketApp.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +9,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // 🔥 Thêm MVC vào container
 builder.Services.AddControllersWithViews();
+
+// 🔥 Thêm Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -23,6 +31,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
+
+// 🔥 Sử dụng Session
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

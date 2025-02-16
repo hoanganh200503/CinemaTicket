@@ -1,0 +1,86 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<CinemaTicketApp.Models.Transaction>
+
+@{
+    ViewData["Title"] = "Lịch sử giao dịch";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Menu bên trái -->
+        <div class="col-md-3">
+            <div class="text-center mb-3">
+                <h4>@Context.Session.GetString("CustomerName")</h4>
+                <p class="text-muted">THÀNH VIÊN TỪ @DateTime.Now.ToString("MM/yyyy")</p>
+            </div>
+            <div class="list-group">
+                <a asp-action="Profile" class="list-group-item list-group-item-action">Thông tin chung</a>
+                <a asp-action="Details" class="list-group-item list-group-item-action">Chi tiết tài khoản</a>
+                <a asp-action="TransactionHistory" class="list-group-item list-group-item-action active">Lịch sử giao dịch</a>
+                <a asp-action="Logout" class="list-group-item list-group-item-action text-danger">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- Lịch sử giao dịch bên phải -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">LỊCH SỬ GIAO DỊCH</h5>
+                </div>
+                <div class="card-body">
+                    @if (!Model.Any())
+                    {
+                        <div class="text-center text-muted">
+                            <p>Bạn chưa có giao dịch nào.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Mã GD</th>
+                                        <th>Phương thức</th>
+                                        <th>Số tiền</th>
+                                        <th>Thời gian</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var transaction in Model)
+                                    {
+                                        <tr>
+                                            <td>#@transaction.TransactionID</td>
+                                            <td>@transaction.PaymentMethod</td>
+                                            <td>@transaction.TotalAmount.ToString("N0") đ</td>
+                                            <td>@transaction.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>
+                                                @if (transaction.Status == "Success" || transaction.Status == "Completed")
+                                                {
+                                                    <span class="badge bg-success">@transaction.Status</span>
+                                                }
+                                                else if (transaction.Status == "Pending")
+                                                {
+                                                    <span class="badge bg-warning">@transaction.Status</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-danger">@transaction.Status</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

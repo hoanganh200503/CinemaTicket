@@ -1,0 +1,54 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model CinemaTicketApp.Models.Customer
+
+@{
+    ViewData["Title"] = "Thông tin tài khoản";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Thông tin người dùng bên trái -->
+        <div class="col-md-3">
+            <div class="text-center mb-3">
+                <h4>@Model.Name</h4>
+                <p class="text-muted">THÀNH VIÊN TỪ @Model.CreatedAt.ToString("MM/yyyy")</p>
+            </div>
+            <div class="list-group">
+                <a asp-action="Profile" class="list-group-item list-group-item-action active">Thông tin chung</a>
+                <a asp-action="Details" class="list-group-item list-group-item-action">Chi tiết tài khoản</a>
+                <a asp-action="TransactionHistory" class="list-group-item list-group-item-action">Lịch sử giao dịch</a>
+                <a asp-action="Logout" class="list-group-item list-group-item-action text-danger">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- Thông tin chi tiết bên phải -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">THÔNG TIN CHUNG</h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="card-title">THÔNG TIN CÁ NHÂN</h6>
+                    <div class="row mb-3">
+                        <div class="col-md-3">Họ và tên:</div>
+                        <div class="col-md-9">@Model.Name</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">Email:</div>
+                        <div class="col-md-9">@Model.Email</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">Trạng thái:</div>
+                        <div class="col-md-9">
+                            <span class="badge bg-success">Hoạt động</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

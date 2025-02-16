@@ -1,0 +1,129 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model CinemaTicketApp.Models.Customer
+
+@{
+    ViewData["Title"] = "Chỉnh sửa thông tin";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Menu bên trái -->
+        <div class="col-md-3">
+            <div class="text-center mb-3">
+                <h4>@Model.Name</h4>
+                <p class="text-muted">THÀNH VIÊN TỪ @Model.CreatedAt.ToString("MM/yyyy")</p>
+            </div>
+            <div class="list-group">
+                <a asp-action="Profile" class="list-group-item list-group-item-action">Thông tin chung</a>
+                <a asp-action="Details" class="list-group-item list-group-item-action">Chi tiết tài khoản</a>
+                <a href="#" class="list-group-item list-group-item-action">Lịch sử giao dịch</a>
+                <a asp-action="Logout" class="list-group-item list-group-item-action text-danger">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- Form chỉnh sửa bên phải -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">CHỈNH SỬA THÔNG TIN</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger">
+                                @Html.ValidationSummary()
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label class="form-label">Họ và tên</label>
+                            <input type="text" class="form-control" name="name" value="@Model.Name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" value="@Model.Email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Đổi mật khẩu?</label>
+                            <select class="form-select" id="changePassword" onchange="togglePasswordFields()">
+                                <option value="no" selected>Không</option>
+                                <option value="yes">Có</option>
+                            </select>
+                        </div>
+
+                        <div id="passwordFields" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">Mật khẩu hiện tại</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" name="currentPassword" id="currentPassword">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('currentPassword')">
+                                        <i class="bi bi-eye" id="currentPassword-icon"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Mật khẩu mới</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" name="newPassword" id="newPassword">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('newPassword')">
+                                        <i class="bi bi-eye" id="newPassword-icon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <a asp-action="Profile" class="btn btn-secondary ms-2">Quay lại</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePasswordFields() {
+            var changePassword = document.getElementById('changePassword');
+            var passwordFields = document.getElementById('passwordFields');
+            passwordFields.style.display = changePassword.value === 'yes' ? 'block' : 'none';
+        }
+
+        function togglePassword(inputId) {
+            var input = document.getElementById(inputId);
+            var icon = document.getElementById(inputId + '-icon');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('bi-eye');
+                icon.classList.add('bi-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('bi-eye-slash');
+                icon.classList.add('bi-eye');
+            }
+        }
+
+        // Tự động mở phần đổi mật khẩu nếu được yêu cầu
+        @if (ViewData["OpenPasswordChange"] != null && (bool)ViewData["OpenPasswordChange"])
+        {
+            <text>
+            document.addEventListener('DOMContentLoaded', function() {
+                var changePassword = document.getElementById('changePassword');
+                changePassword.value = 'yes';
+                togglePasswordFields();
+            });
+            </text>
+        }
+    </script>
+}
