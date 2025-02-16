@@ -1,5 +1,6 @@
 ﻿using CinemaTicketApp.Data;
 using Microsoft.EntityFrameworkCore;
+using CinemaTicket.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,12 +8,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddDbContext<CinemaTicketDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // 🔥 Thêm MVC vào container
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// 🔥 Middleware pipeline
+// 🔥 Middleware pipeline    
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
