@@ -7,8 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔥 Thêm MVC vào container
+// 🔥 Thêm MVC và Session vào container
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Session hết hạn sau 30 phút
+    options.Cookie.HttpOnly = true; // Tăng bảo mật
+    options.Cookie.IsEssential = true; // Cần thiết ngay cả khi tắt cookie
+});
 
 var app = builder.Build();
 
@@ -22,6 +28,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession(); // Kích hoạt session
 app.UseAuthorization();
 
 app.MapControllerRoute(
