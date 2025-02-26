@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<CinemaTicket.Data.Movie>
+@{
+    ViewData["Title"] = "Kết quả tìm kiếm";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Kết quả tìm kiếm</h1>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left me-2"></i>Quay lại
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Không tìm thấy phim nào phù hợp với tiêu chí tìm kiếm.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var movie in Model)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="movie-card">
+                        <img src="~/images/@(movie.Title).jpg" class="card-img-top" alt="@movie.Title"
+                             onerror="this.src='/images/movie-placeholder.jpg'">
+                        <div class="card-body">
+                            <h5 class="card-title">@movie.Title</h5>
+                            <p class="card-text">Thời lượng: @movie.Duration phút</p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Thể loại: @string.Join(", ", movie.Genres.Select(g => g.GenreName))
+                                </small>
+                            </p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Đang chiếu từ: @movie.ReleaseDate.ToString("dd/MM/yyyy")
+                                </small>
+                            </p>
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("Book", "Movies", new { id = movie.MovieId })" class="btn btn-primary flex-grow-1">Đặt vé</a>
+                                <a href="@Url.Action("Details", "Movies", new { id = movie.MovieId })" class="btn btn-outline-primary">Chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

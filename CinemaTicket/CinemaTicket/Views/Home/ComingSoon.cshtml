@@ -1,0 +1,54 @@
+﻿@model IEnumerable<CinemaTicket.Data.Movie>
+@{
+    ViewData["Title"] = "Phim Sắp Chiếu";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Phim Sắp Chiếu</h1>
+        <a href="@Url.Action("NowShowing", "Home")" class="btn btn-outline-primary">
+            <i class="bi bi-film me-2"></i>Xem Phim Đang Chiếu
+        </a>
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger mb-4">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Không có phim nào sắp chiếu.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var movie in Model)
+            {
+                <div class="col-md-3 mb-4">
+                    <div class="movie-card">
+                        <img src="~/images/@(movie.Title).jpg" class="card-img-top" alt="@movie.Title"
+                             onerror="this.src='/images/movie-placeholder.jpg'">
+                        <div class="card-body">
+                            <h5 class="card-title">@movie.Title</h5>
+                            <p class="card-text">Thời lượng: @movie.Duration phút</p>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    Khởi chiếu: @movie.ReleaseDate.ToString("dd/MM/yyyy")
+                                </small>
+                            </p>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-secondary flex-grow-1" disabled>Sắp chiếu</button>
+                                <a href="#" class="btn btn-outline-primary">Chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

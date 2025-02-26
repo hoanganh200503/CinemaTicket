@@ -1,0 +1,58 @@
+Sửa dataconect
+Tạo area admin => khai báo tại Program.cs 
+Bổ sung MovieGenreMapping và sửa đổi cinematicketDbcontext do thiếu khóa ngoại và bỏ cuộc
+thêm Admin movie CRUD vào area
+sửa front-end admin page, movielist
+thêm movie CRUD vào admin page
+sửa phần hình ảnh. chỉ lưu tên ảnh + loại ảnh (image1.jpg) 
+k thể làm phần genre
+
+
+
+
+
+
+////////////////////////////////////   thử mapping và thất bại
+    modelBuilder.Entity<Movie>(entity =>
+    {
+        entity.HasKey(e => e.MovieId).HasName("PK__Movies__4BD2943AC803DF78");
+
+        entity.Property(e => e.MovieId).HasColumnName("MovieID");
+        entity.Property(e => e.CreatedAt)
+            .HasDefaultValueSql("(getdate())")
+            .HasColumnType("datetime");
+        entity.Property(e => e.Language).HasMaxLength(50);
+        entity.Property(e => e.Title).HasMaxLength(255);
+        entity.Property(e => e.UpdatedAt)
+            .HasDefaultValueSql("(getdate())")
+            .HasColumnType("datetime");
+
+        entity.HasMany(d => d.MovieGenreMapping).WithOne(p => p.Movie); // Thêm MovieGenreMapping và WithOne để liên kết với MovieGenreMapping
+    });
+
+    modelBuilder.Entity<MovieGenre>(entity =>
+    {
+        entity.HasKey(e => e.GenreId).HasName("PK__MovieGen__0385055EC9EEC64F");
+
+        entity.HasIndex(e => e.GenreName, "UQ__MovieGen__BBE1C339BA8B30FD").IsUnique();
+
+        entity.Property(e => e.GenreId).HasColumnName("GenreID");
+        entity.Property(e => e.GenreName).HasMaxLength(100);
+        entity.HasMany(d => d.MovieGenreMapping).WithOne(p => p.Genre); // Thêm MovieGenreMappings và WithOne để liên kết với MovieGenreMapping
+    });
+
+
+    //  
+    modelBuilder.Entity<MovieGenreMapping>()
+       .HasKey(mg => new { mg.MovieId, mg.GenreId });
+
+    modelBuilder.Entity<MovieGenreMapping>()
+        .HasOne(mg => mg.Movie)
+        .WithMany(m => m.MovieGenreMapping)
+        .HasForeignKey(mg => mg.MovieId);
+
+    modelBuilder.Entity<MovieGenreMapping>()
+        .HasOne(mg => mg.Genre)
+        .WithMany(g => g.MovieGenreMapping)
+        .HasForeignKey(mg => mg.GenreId);
+

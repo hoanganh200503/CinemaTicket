@@ -2,10 +2,11 @@
 {
     public class Ticket
     {
-        public int TicketID { get; set; }
-        public int CustomerID { get; set; }
-        public int ShowtimeID { get; set; }
-        public int SeatID { get; set; }
+        public int TicketId { get; set; }
+        public int CustomerId { get; set; }
+        public int ShowtimeId { get; set; }
+        public decimal Price { get; set; }
+        public int SeatId { get; set; }
         public string Status { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

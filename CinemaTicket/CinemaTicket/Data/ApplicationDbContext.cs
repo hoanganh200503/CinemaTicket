@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CinemaTicketApp.Models;
+using CinemaTicket.Data;
 
 namespace CinemaTicketApp.Data
 {
@@ -15,6 +15,5 @@ namespace CinemaTicketApp.Data
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Promotion> Promotions { get; set; }
     }
 }

@@ -1,13 +1,332 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model IEnumerable<CinemaTicket.Data.Movie>
+@{
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Hero Banner Section -->
+<br />
+<div class="hero-banner">
+	<div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+		<div class="carousel-indicators">
+			<button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+			<button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+			<button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+		</div>
+		<div class="carousel-inner">
+			<div class="carousel-item active">
+				<img src="~/images/Lật Mặt 6.jpg" class="d-block w-100" alt="Lật Mặt 6">
+				<div class="carousel-caption">
+					<h2>Lật Mặt 6</h2>
+					<p>Tác phẩm hành động đặc sắc của điện ảnh Việt</p>
+					<a href="#" class="btn btn-primary">Đặt Vé Ngay</a>
+				</div>
+			</div>
+			<div class="carousel-item">
+				<img src="~/images/Gái Già Lắm Chiêu V.jpg" class="d-block w-100" alt="Gái Già Lắm Chiêu V">
+				<div class="carousel-caption">
+					<h2>Gái Già Lắm Chiêu V</h2>
+					<p>Câu chuyện đầy màu sắc về phong cách sống hiện đại</p>
+					<a href="#" class="btn btn-primary">Đặt Vé Ngay</a>
+				</div>
+			</div>
+			<div class="carousel-item">
+				<img src="~/images/Bẫy Ngọt Ngào.jpg" class="d-block w-100" alt="Bẫy Ngọt Ngào">
+				<div class="carousel-caption">
+					<h2>Bẫy Ngọt Ngào</h2>
+					<p>Bộ phim tình cảm lãng mạn đáng mong đợi</p>
+					<a href="#" class="btn btn-primary">Đặt Vé Ngay</a>
+				</div>
+			</div>
+		</div>
+		<button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		</button>
+		<button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		</button>
+	</div>
 </div>
 
-
-<div>
-    <a class="navbar-brand" asp-area="" asp-controller="Admin" asp-action="AdminPage">Admin Page</a> <!-- dẩn đến trang Admin -->
+<!-- Movie Type Buttons -->
+<div class="movie-type-section py-4">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="d-flex justify-content-center gap-4">
+					<a href="@Url.Action("NowShowing", "Home")"
+					   class="btn btn-primary btn-lg flex-grow-1">
+						<i class="bi bi-film me-2"></i>Phim Đang Chiếu
+					</a>
+					<a href="@Url.Action("ComingSoon", "Home")"
+					   class="btn btn-primary btn-lg flex-grow-1">
+						<i class="bi bi-calendar-event me-2"></i>Phim Sắp Chiếu
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
+
+<!-- Search Section -->
+<div class="search-section py-4 bg-light">
+	<div class="container">
+		@if (TempData["Error"] != null)
+		{
+			<div class="alert alert-danger mb-3">
+				@TempData["Error"]
+			</div>
+		}
+		<form method="get" action="@Url.Action("Search", "Home")" class="row g-3 justify-content-center">
+			<!-- Tìm kiếm theo tên phim -->
+			<div class="col-md-5">
+				<div class="input-group">
+					<span class="input-group-text"><i class="bi bi-search"></i></span>
+					<input type="text" class="form-control" name="searchTerm" placeholder="Nhập tên phim..." value="@ViewBag.SearchTerm">
+				</div>
+			</div>
+
+			<!-- Tìm kiếm theo thể loại -->
+			<div class="col-md-4">
+				<select class="form-select" name="genre">
+					<option value="">Tất cả thể loại</option>
+					@foreach (var genre in ViewBag.Genres ?? new List<string>())
+					{
+						<option value="@genre" selected="@(genre == ViewBag.SelectedGenre)">@genre</option>
+					}
+				</select>
+			</div>
+
+			<div class="col-md-2">
+				<button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!-- Latest Movies Section -->
+<section class="latest-movies py-5">
+	<div class="container">
+		<h2 class="section-title">Phim Mới Nhất</h2>
+		<div id="latestMoviesCarousel" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				@for (int i = 0; i < Math.Ceiling(Model.Count() / 4.0); i++)
+				{
+					<button type="button" data-bs-target="#latestMoviesCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")"
+							aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @(i + 1)"></button>
+				}
+			</div>
+			<div class="carousel-inner">
+				@{
+					var movies = Model.ToList();
+					for (int i = 0; i < movies.Count; i += 4)
+					{
+						<div class="carousel-item @(i == 0 ? "active" : "")">
+							<div class="row">
+								@foreach (var movie in movies.Skip(i).Take(4))
+								{
+									<div class="col-md-3">
+										<div class="movie-card">
+											<img src="~/images/@(movie.Title).jpg" class="card-img-top" alt="@movie.Title"
+												 onerror="this.src='/images/movie-placeholder.jpg'">
+											<div class="card-body">
+												<h5 class="card-title">@movie.Title</h5>
+												<p class="card-text text-muted">@string.Join(", ", movie.Genres.Select(g => g.GenreName))</p>
+												<a href="#" class="btn btn-primary btn-sm">Đặt Vé</a>
+											</div>
+										</div>
+									</div>
+								}
+							</div>
+						</div>
+					}
+				}
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#latestMoviesCarousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#latestMoviesCarousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+	</div>
+</section>
+
+<!-- Promotions Section -->
+<section class="promotions py-5">
+	<div class="container">
+		<h2 class="section-title">Ưu Đãi Đặc Biệt</h2>
+		<div class="row">
+			<div class="col-md-4 mb-4">
+				<div class="promo-card">
+					<img src="~/images/Em Chưa 18.jpg" class="card-img-top" alt="Ưu Đãi Học Sinh - Sinh Viên">
+					<div class="card-body">
+						<h5 class="card-title">Ưu Đãi Học Sinh - Sinh Viên</h5>
+						<p class="card-text">Giảm 20% khi xuất trình thẻ học sinh, sinh viên</p>
+						<a href="#" class="btn btn-outline-primary">Xem Thêm</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mb-4">
+				<div class="promo-card">
+					<img src="~/images/Nắng 3 Lời Hứa Của Cha.jpg" class="card-img-top" alt="Gói Gia Đình">
+					<div class="card-body">
+						<h5 class="card-title">Gói Gia Đình</h5>
+						<p class="card-text">Ưu đãi đặc biệt cho gia đình 4 người</p>
+						<a href="#" class="btn btn-outline-primary">Xem Thêm</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 mb-4">
+				<div class="promo-card">
+					<img src="~/images/Rừng Thế Mạng.jpg" class="card-img-top" alt="Thành Viên VIP">
+					<div class="card-body">
+						<h5 class="card-title">Thành Viên VIP</h5>
+						<p class="card-text">Tham gia chương trình thành viên - Nhận ngay ưu đãi</p>
+						<a href="#" class="btn btn-outline-primary">Xem Thêm</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+@section Styles {
+	<style>
+		.hero-banner {
+			margin-top: -1rem;
+		}
+
+		.carousel-item {
+			height: 600px;
+		}
+
+			.carousel-item img {
+				object-fit: cover;
+				height: 100%;
+				width: 100%;
+			}
+
+		.carousel-caption {
+			background: rgba(0,0,0,0.5);
+			padding: 2rem;
+			border-radius: 10px;
+			bottom: 20%;
+		}
+
+			.carousel-caption h2 {
+				font-size: 2.5rem;
+				font-weight: bold;
+				margin-bottom: 1rem;
+			}
+
+			.carousel-caption p {
+				font-size: 1.2rem;
+				margin-bottom: 1.5rem;
+			}
+
+		.carousel-indicators {
+			bottom: 40px;
+		}
+
+			.carousel-indicators button {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				margin: 0 8px;
+			}
+
+		.section-title {
+			margin-bottom: 2rem;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		.movie-card {
+			transition: transform 0.3s;
+			height: 100%;
+			margin-bottom: 20px;
+		}
+
+			.movie-card:hover {
+				transform: translateY(-5px);
+			}
+
+			.movie-card img {
+				height: 200px;
+				object-fit: cover;
+			}
+
+			.movie-card .card-body {
+				padding: 1rem;
+			}
+
+			.movie-card .card-title {
+				font-size: 1rem;
+				margin-bottom: 0.5rem;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
+			.movie-card .card-text {
+				font-size: 0.875rem;
+				margin-bottom: 0.5rem;
+			}
+		/* Điều chỉnh cho Latest Movies Carousel */
+		.latest-movies .carousel-item {
+			height: auto;
+			padding: 20px 0;
+		}
+
+		.latest-movies .carousel-control-prev,
+		.latest-movies .carousel-control-next {
+			width: 5%;
+			background: rgba(0,0,0,0.3);
+			height: 50px;
+			top: 50%;
+			transform: translateY(-50%);
+			border-radius: 5px;
+		}
+
+		.latest-movies .carousel-indicators {
+			bottom: -20px;
+		}
+
+			.latest-movies .carousel-indicators button {
+				background-color: #666;
+			}
+		/* Làm nhỏ lại phần Promotions */
+		.promo-card img {
+			height: 180px;
+			object-fit: cover;
+		}
+
+		.promo-card .card-body {
+			padding: 1rem;
+		}
+
+		.promo-card .card-title {
+			font-size: 1.1rem;
+		}
+
+		.promo-card .card-text {
+			font-size: 0.9rem;
+		}
+	</style>
+}
+
+@section Scripts {
+	<script>
+		$(document).ready(function() {
+			// Initialize carousel with auto-sliding
+			$('#heroCarousel').carousel({
+				interval: 5000 // Change slides every 5 seconds
+			});
+		});
+	</script>
+}
+

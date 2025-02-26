@@ -1,0 +1,68 @@
+﻿<!-- /. NAV TOP  -->
+<nav class="navbar-default navbar-side" role="navigation">
+	<div class="sidebar-collapse">
+		<ul class="nav" id="main-menu">
+			<li class="text-center">
+				<img src="~/img/Isol_chibi.jpg" alt="AdminImg" class="user-image img-responsive" />
+			</li>
+
+
+			<li>
+				<a class="active-menu" href="index.html"><i class="fa fa-dashboard fa-3x"></i> Dashboard</a>
+			</li>
+			<li>
+				<a href="#"><i class="fa fa-table fa-3x"></i> Manage<span class="fa arrow"></span></a>
+				<ul class="nav nav-second-level">
+					<li>
+						<a asp-area="Admin" asp-controller="Movie" asp-action="Index">Movie List</a>
+					</li>
+					<li>
+						<a asp-area="Admin" asp-controller="Showtime" asp-action="Index">Showtime List</a>
+					</li>
+					<li>
+						<a asp-area="Admin" asp-controller="Review" asp-action="Index">Review List</a>
+					</li>
+					<li>
+						<a asp-area="Admin" asp-controller="Customer" asp-action="Index">Customer List</a>
+					</li>
+					<li>
+						<a href="#">Showtime</a>
+					</li>
+					<li>
+						<a href="#">Rooms<span class="fa arrow"></span></a>
+						<ul class="nav nav-third-level">
+							<li>
+								<a href="#">Room 1</a>
+							</li>
+							<li>
+								<a href="#">Room 2</a>
+							</li>
+							<li>
+								<a href="#">Room 3</a>
+							</li>
+
+						</ul>
+
+					</li>
+				</ul>
+			</li>
+
+		</ul>
+
+	</div>
+
+</nav>
+<!-- /. WRAPPER  -->
+<!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
+<!-- JQUERY SCRIPTS -->
+<script src="~/js/jquery-1.10.2.js"></script>
+<!-- BOOTSTRAP SCRIPTS -->
+<script src="~/js/bootstrap.min.js"></script>
+<!-- METISMENU SCRIPTS -->
+<script src="~/js/jquery.metisMenu.js"></script>
+<!-- MORRIS CHART SCRIPTS -->
+<script src="~/js/morris/raphael-2.1.0.min.js"></script>
+<script src="~/js/morris/morris.js"></script>
+<!-- CUSTOM SCRIPTS -->
+<script src="~/js/custom.js"></script>
+
