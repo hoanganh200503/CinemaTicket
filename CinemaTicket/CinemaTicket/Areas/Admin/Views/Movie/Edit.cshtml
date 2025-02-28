@@ -1,6 +1,5 @@
-﻿ @model CinemaTicket.Data.Movie
-@* @model IEnumerable<CinemaTicket.Data.Movie> *@
-	@inject CinemaTicketAdmin.Data.CinemaTicketAdminDbContext _context //truy cập database context
+﻿ @model CinemaTicketAdmin.Data.Movie
+
 <h4>Edit Movie</h4>
 <hr />
 <div class="row">
@@ -19,7 +18,13 @@
 				{
 					<img src="~/images/@Model.Url" width="100" />
 				}
-				<input type="file" name="file" value="@Model.Url" class="form-control" />
+				else
+				{
+					<img src="~/images/movie-placeholder.jpg" width="100" />
+				}
+				<input asp-for="Title" type="file" name="file"
+					   value="@Model.Url"
+					   class="form-control" required />
 			</div>
 			<div class="form-group">
 				<label asp-for="Duration" class="control-label"></label>
@@ -47,23 +52,18 @@
 				<span asp-validation-for="Description" class="text-danger"></span>
 			</div>
 			<div class="form-group">
-				@*
-					@foreach (var genre in allGenres as List<CinemaTicket.Data.MovieGenre>)
+				<label class="control-label">Genres</label>
+				@if (ViewBag.Genres != null)
+				{
+					foreach (var genre in ViewBag.Genres as List<CinemaTicketAdmin.Data.MovieGenre>)
 					{
-						<div class="form-control">
-							<label asp-for="Genres" class="form-check-label">
-								@genre.GenreName
-								<input type="checkbox" name="selectedGenres" value="@genre.GenreName" class="form-check-input"
-								@(Model.Genres.Any(g => g.GenreName == genre.GenreName) ? "checked" : "") />
-							</label>
+						<div class="form-check">
+							<input type="checkbox" name="selectedGenres" value="@genre.GenreId" class="form-check-input" />
+							<label class="form-check-label">@genre.GenreName</label>
 						</div>
-					}*@
-				<select asp-for="Genres" name="selectedGenres" id="selectedGenres" multiple="multiple">
-					@foreach (var genre in ViewBag.Genres as List<CinemaTicket.Data.MovieGenre>)// as List<CinemaTicket.Data.MovieGenre>
-					{
-						<option  value="@genre">@genre.GenreName</option>
 					}
-				</select>
+				}
+
 			</div>
 
 			<div class="form-group">

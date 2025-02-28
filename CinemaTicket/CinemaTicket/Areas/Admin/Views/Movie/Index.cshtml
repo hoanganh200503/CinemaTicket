@@ -31,8 +31,15 @@
 							{
 								<tr class="">
 									<td>
-										<img width="100px"
-											 src="~/images/@Html.DisplayFor(modelItem => item.Url)" alt="Poster" />
+										@if (!string.IsNullOrEmpty(item.Url))
+										{
+											<img width="100" src="~/images/@Html.DisplayFor(modelItem => item.Url)" alt="Poster" />
+										}
+										else
+										{
+											<img src="~/images/movie-placeholder.jpg" width="100" alt="Poster" />
+										}
+										
 									</td>
 									<td>@Html.DisplayFor(modelItem => item.Title)</td>
 									<td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>

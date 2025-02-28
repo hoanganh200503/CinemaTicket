@@ -26,6 +26,6 @@ public partial class Movie
     public string? Url { get; set; }
 
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
-
+    [DisplayName("Genre")]
     public virtual ICollection<MovieGenreMapping> MovieGenreMappings { get; set; } = new List<MovieGenreMapping>();
 }
