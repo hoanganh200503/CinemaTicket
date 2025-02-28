@@ -1,73 +1,84 @@
-﻿@model CinemaTicket.Data.Movie
-
+﻿ @model CinemaTicket.Data.Movie
+@* @model IEnumerable<CinemaTicket.Data.Movie> *@
+	@inject CinemaTicketAdmin.Data.CinemaTicketAdminDbContext _context //truy cập database context
 <h4>Edit Movie</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" role="form" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MovieId" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Url" class="control-label">Poster</label>
-                @if (!string.IsNullOrEmpty(Model.Url)) 
-                {
-                    <img src="~/images/@Model.Url" width="100" />
-                }
-                <input type="file" name="file" value="@Model.Url" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
-                <span asp-validation-for="Duration" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Language" class="control-label"></label>
-                <select asp-for="Language" class="form-control">
-                    <option value="Dubbed">Dubbed</option>
-                    <option value="Subtitled">Subtitled</option>
-                </select>
-                <span asp-validation-for="Language" class="text-danger"></span>
-            </div>
+	<div class="col-md-4">
+		<form asp-action="Edit" role="form" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="MovieId" />
+			<div class="form-group">
+				<label asp-for="Title" class="control-label"></label>
+				<input asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Url" class="control-label">Poster</label>
+				@if (!string.IsNullOrEmpty(Model.Url))
+				{
+					<img src="~/images/@Model.Url" width="100" />
+				}
+				<input type="file" name="file" value="@Model.Url" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label asp-for="Duration" class="control-label"></label>
+				<input asp-for="Duration" class="form-control" />
+				<span asp-validation-for="Duration" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Language" class="control-label"></label>
+				<select asp-for="Language" class="form-control">
+					<option value="Dubbed">Dubbed</option>
+					<option value="Subtitled">Subtitled</option>
+				</select>
+				<span asp-validation-for="Language" class="text-danger"></span>
+			</div>
 
-            <div class="form-group" >
-                <label asp-for="ReleaseDate" class="control-label"></label>
+			<div class="form-group">
+				<label asp-for="ReleaseDate" class="control-label"></label>
+				<input asp-for="ReleaseDate" class="form-control" type="date" />
+				<span asp-validation-for="ReleaseDate" class="text-danger"></span>
+			</div>
 
-                <input asp-for="@Model.ReleaseDate" class="form-control" type="date" />
-                <span asp-validation-for="ReleaseDate" class="text-danger"></span>
-            </div>
+			<div class="form-group">
+				<label asp-for="Description" class="control-label"></label>
+				<input asp-for="Description" class="form-control" />
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				@*
+					@foreach (var genre in allGenres as List<CinemaTicket.Data.MovieGenre>)
+					{
+						<div class="form-control">
+							<label asp-for="Genres" class="form-check-label">
+								@genre.GenreName
+								<input type="checkbox" name="selectedGenres" value="@genre.GenreName" class="form-check-input"
+								@(Model.Genres.Any(g => g.GenreName == genre.GenreName) ? "checked" : "") />
+							</label>
+						</div>
+					}*@
+				<select asp-for="Genres" name="selectedGenres" id="selectedGenres" multiple="multiple">
+					@foreach (var genre in ViewBag.Genres as List<CinemaTicket.Data.MovieGenre>)// as List<CinemaTicket.Data.MovieGenre>
+					{
+						<option  value="@genre">@genre.GenreName</option>
+					}
+				</select>
+			</div>
 
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            @* <div class="form-group"> *@
-            @* 	<label asp-for="Genres" class="control-label">Genres</label> *@
-            @* 	@foreach (var genre in ViewBag.Genres as List<CinemaTicket.Data.MovieGenre>) // Thay YourNamespace.Models bằng namespace của các models của bạn *@
-            @* 	{ *@
-            @* 		<div class="form-check"> *@
-            @* 			<input type="checkbox" name="selectedGenres" value="@genre.GenreId" /> *@
-            @* 			<label class="form-check-label">@genre.GenreName</label> *@
-            @* 		</div> *@
-            @* 	} *@
-            @* </div> *@
-         
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }

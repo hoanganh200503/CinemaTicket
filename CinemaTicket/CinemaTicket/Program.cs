@@ -10,6 +10,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddDbContext<CinemaTicketDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// khai báo dataconection trong admin area
+builder.Services.AddDbContext<CinemaTicketAdmin.Data.CinemaTicketAdminDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // 🔥 Thêm MVC vào container
 builder.Services.AddControllersWithViews();

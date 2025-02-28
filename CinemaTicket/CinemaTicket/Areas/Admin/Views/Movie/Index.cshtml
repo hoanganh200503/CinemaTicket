@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CinemaTicket.Data.Movie>
+﻿@model IEnumerable<CinemaTicketAdmin.Data.Movie>
 @{
 	ViewData["Title"] = "Movie List";
 }
@@ -12,17 +12,17 @@
 		<!-- Advanced Tables -->
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				Advanced Tables
+				Movie Table
 			</div>
 			<div class="panel-body">
 				<div class="table-responsive">
 					<table class="table table-striped table-bordered table-hover" id="dataTables-example">
 						<thead>
 							<tr>
-								<th>@Html.DisplayNameFor(model => model.Url)</th>
-								<th>@Html.DisplayNameFor(model => model.Title)</th>
-								<th>@Html.DisplayNameFor(model => model.UpdatedAt)</th>
-								<th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+								<th width="110px">@Html.DisplayNameFor(model => model.Url)</th>
+								<th width="200px">@Html.DisplayNameFor(model => model.Title)</th>
+								<th width="150px">@Html.DisplayNameFor(model => model.UpdatedAt)</th>
+								<th width="150px">@Html.DisplayNameFor(model => model.CreatedAt)</th>
 								<th></th>
 							</tr>
 						</thead>
@@ -38,24 +38,25 @@
 									<td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
 									<td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
 									<td>
-										<a  asp-action="Edit" asp-route-id="@item.MovieId">Edit</a> |
-										<a asp-action="Details" asp-route-id="@item.MovieId">Details</a> |
-										<a asp-action="Delete" asp-route-id="@item.MovieId">Delete</a>
+										
+											<a asp-action="Edit" asp-route-id="@item.MovieId">Edit</a> |
+											<a asp-action="Details" asp-route-id="@item.MovieId">Details</a> |
+											<a asp-action="Delete" asp-route-id="@item.MovieId">Delete</a>
 									</td>
 								</tr>
 							}
 						</tbody>
 					</table>
 				</div>
-
 			</div>
 		</div>
-		<!--End Advanced Tables -->
 	</div>
 </div>
-<script>
-	//Không dùng được 
-	$(document).ready(function () {
-		$('#dataTables-example').dataTable();
-	});
-</script>
+<!--End Advanced Tables -->
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			$('#dataTables-example').dataTable();
+		});
+	</script>
+}

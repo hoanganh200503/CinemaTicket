@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CinemaTicket.Data;
+using CinemaTicketAdmin.Data;
 using System.Linq;
 
 
-namespace CinemaTicket.Areas.Admin.Controllers
+namespace CinemaTicketAdmin.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class AdminController : Controller
     {
-        private readonly CinemaTicketDbContext _context;
+        private readonly CinemaTicketAdminDbContext _context;
 
-        public AdminController(CinemaTicketDbContext context)
+        public AdminController(CinemaTicketAdminDbContext context)
         {
             _context = context;
         }

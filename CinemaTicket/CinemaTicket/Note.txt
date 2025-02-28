@@ -2,6 +2,7 @@ Sửa dataconect
 Tạo area admin => khai báo tại Program.cs 
 Bổ sung MovieGenreMapping và sửa đổi cinematicketDbcontext do thiếu khóa ngoại và bỏ cuộc
 thêm Admin movie CRUD vào area
+Theêm các file css, js, image vào wwwroot  file HtmlTemplate để tiện chép code
 sửa front-end admin page, movielist
 thêm movie CRUD vào admin page
 sửa phần hình ảnh. chỉ lưu tên ảnh + loại ảnh (image1.jpg) 

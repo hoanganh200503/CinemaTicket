@@ -1,69 +1,56 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using CinemaTicket.Data;
-using CinemaTicket.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using CinemaTicketAdmin.Data;
 using Microsoft.EntityFrameworkCore;
-using Humanizer.Localisation;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Threading.Channels;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace CinemaTicket.Areas.Admin.Controllers
+
+namespace CinemaTicketAdmin.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class MovieController : Controller
     {
-        private readonly CinemaTicketDbContext _context;
+        private readonly CinemaTicketAdminDbContext _context;
 
-        public MovieController(CinemaTicketDbContext context)
+        public MovieController(CinemaTicketAdminDbContext context)
         {
             _context = context;
         }
 
-
         // GET: MovieController
         public async Task<IActionResult> Index()
         {
-
             var movie = await _context.Movies
                  .ToListAsync();
             return View(movie);
         }
 
         // GET: Movie/Details/5
-        public async Task<IActionResult> Details(int? id) // Thay đổi tham số thành int? id
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            // Lấy thông tin phim theo movieID
+            // Lấy Movie dựa trên MovieId và load các Genres liên quan thông qua MovieGenreMappings
             var movie = await _context.Movies
-                .Include(m => m.Genres) // Lấy danh sách thể loại của phim
+                .Include(m => m.MovieGenreMappings)
+                    .ThenInclude(mgm => mgm.Genre)
                 .FirstOrDefaultAsync(m => m.MovieId == id);
-
-            if (movie == null)
-            {
-                return NotFound();
-            }
-
-            // Lấy danh sách tất cả thể loại để hiển thị trong dropdown
-            var genres = await _context.MovieGenres
-                .Select(g => g.GenreName)
-                .Distinct()
-                .OrderBy(g => g)
-                .ToListAsync();
-
-            ViewBag.Genres = genres;
-
-            return View(movie); // Truyền movie vào view
+     
+            return View(movie);
         }
-
 
         // GET: Movie/Create
         public async Task<IActionResult> Create()
         {
-            ViewBag.Genres = await _context.MovieGenres.ToListAsync();
+            var genres = await _context.MovieGenres
+           .Select(g => g.GenreName)
+           .Distinct()
+           .OrderBy(g => g)
+           .ToListAsync();
+            ViewBag.Genres = genres;
+
             return View();
         }
 
@@ -89,21 +76,31 @@ namespace CinemaTicket.Areas.Admin.Controllers
                     movie.Url = fileName;
                 }
 
-                // Gán thể loại đã chọn
-                //if (selectedGenres != null)
-                //{
-                //    movie.Genres = await _context.MovieGenres
-                //        .Where(g => selectedGenres.Contains(g.GenreId))
-                //        .ToListAsync();
-                //}
 
-                var existingMovie = await _context.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.MovieId == movie.MovieId);
                 movie.CreatedAt = DateTime.Now;
                 movie.UpdatedAt = DateTime.Now;
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
+
+                _context.Movies.Add(movie);
+                await _context.SaveChangesAsync(); // Lưu movie trước để có MovieId
+
+                // Gán thể loại đã chọn
+                if (selectedGenres != null && selectedGenres.Length > 0)
+                {
+                    foreach (var genreId in selectedGenres)
+                    {
+                        var movieGenreMapping = new MovieGenreMapping
+                        {
+                            MovieId = movie.MovieId,
+                            GenreId = genreId
+                        };
+                        _context.MovieGenreMappings.Add(movieGenreMapping);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewBag.Genres = await _context.MovieGenres.ToListAsync();
             return View(movie);
         }
@@ -114,14 +111,22 @@ namespace CinemaTicket.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            var movie = await _context.Movies
+                .Include(g => g.MovieGenreMappings)
+                      .FirstAsync(m => m.MovieId == id);
 
-            ViewBag.Genres = await _context.MovieGenres.ToListAsync();
-            var movie = await _context.Movies.FindAsync(id);
             if (movie == null)
             {
                 return NotFound();
-            }
+            } //nếu movie không có
+            var genres = await _context.MovieGenres
+                .Include(g => g.MovieGenreMappings)
+                  .Distinct()
+                  .OrderBy(g => g)
+                  .ToListAsync();
 
+            ViewBag.Genres = genres;
+            ViewBag.Movies = movie;
             return View(movie);
         }
 
@@ -131,7 +136,7 @@ namespace CinemaTicket.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Movie movie, IFormFile file, int[] selectedGenres)
+        public async Task<IActionResult> Edit(int id, Movie movie, IFormFile file, List<string> selectedGenres)
         {
             if (id != movie.MovieId)
             {
@@ -142,17 +147,22 @@ namespace CinemaTicket.Areas.Admin.Controllers
             {
                 try
                 {
-                    var existingMovie = await _context.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.MovieId == id);
-                    if (existingMovie != null)
+
+                    var existingMovie = await _context.Movies
+                    .Include(m => m.MovieGenreMappings)
+                    .FirstOrDefaultAsync(m => m.MovieId == id);
+
+                    var genres = await _context.MovieGenres
+                   .Select(g => g.GenreName)
+                   .Distinct()
+                   .OrderBy(g => g)
+                   .ToListAsync();
+
+                    if (existingMovie == null) // Kiểm tra xem existingMovie có tồn tại không
                     {
-                        movie.CreatedAt = existingMovie.CreatedAt;
-                        if (movie.ReleaseDate == default)
-                        {
-                            movie.ReleaseDate = existingMovie.ReleaseDate;
-                        }
+                        return NotFound(); // Trả về NotFound nếu không tìm thấy phim
                     }
 
-                    // Xử lý upload ảnh
                     if (file != null && file.Length > 0)
                     {
                         var fileName = Path.GetFileName(file.FileName); // Lấy tên file gốc
@@ -171,51 +181,44 @@ namespace CinemaTicket.Areas.Admin.Controllers
                             //File đã tồn tại, dùng lại tên file.
                             movie.Url = fileName;
                         }
-                    }
-                    else
+                    } // Thêm, đổi file Ảnh
+                    else if (existingMovie != null)
                     {
-                        // Không có file mới, sử dụng ảnh cũ
-                        if (existingMovie != null)
-                        {
-                            movie.Url = existingMovie.Url;
-                        }
-                    }
+                        movie.Url = existingMovie.Url;
+                    }   // Không có file mới, sử dụng ảnh cũ
+                    else if (existingMovie != null && string.IsNullOrEmpty(movie.Url))
+                    {
+                        movie.Url = "default.jpg"; // Đặt ảnh mặc định
+                    }// Nếu không có file mới và Url cũ trống
+                    else if (existingMovie != null)
+                    {
+                        movie.Url = existingMovie.Url;
+                    }// Nếu không có file mới, giữ ảnh cũ
 
-                    // Gán thể loại đã chọn (bỏ comment nếu cần)
-                    // if (selectedGenres != null)
-                    // {
-                    //     movie.Genres = await _context.MovieGenres
-                    //         .Where(g => selectedGenres.Contains(g.GenreId))
-                    //         .ToListAsync();
-                    // }
 
                     // Cập nhật UpdatedAt
                     movie.UpdatedAt = DateTime.Now;
-
                     // Cập nhật Movie
-                    _context.Update(movie);
+                    _context.Movies.Update(movie);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateConcurrencyException) // Lỗi khi cập nhật
                 {
                     if (!MovieExists(movie.MovieId))
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    return RedirectToAction(nameof(Index));
                 }
             }
-
             ViewBag.Genres = await _context.MovieGenres.ToListAsync();
             return View(movie);
         }
 
 
-        // GET: Movie/Delete/5
+        // GET: Movie/Delete/5 
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

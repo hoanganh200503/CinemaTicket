@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CinemaTicket.Data;
+namespace CinemaTicketAdmin.Data;
 
 public partial class MovieGenreMapping
 {

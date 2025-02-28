@@ -1,15 +1,15 @@
-﻿@model CinemaTicket.Data.Movie
+﻿ @model CinemaTicketAdmin.Data.Movie
 
+<h4>Movie</h4>
+<hr />
 <div>
-	<h4>Movie</h4>
-	<hr />
 	<dl class="row">
 		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.Url)
 		</dt>
 		<dd class="col-sm-10">
 			<img width="100px"
-				 src="~/images/@Html.DisplayFor(model => model.Url)" alt="Poster" />
+				 src="~/images/@Model.Url" alt="Poster" />//@* @Html.DisplayFor(model => model.Url) *@
 		</dd>
 		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.Title)
@@ -17,29 +17,29 @@
 		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.Title)
 		</dd>
-		@*									//Phong ấn vì không dùng được 
 		<dt class="col-sm-2">
-			@Html.DisplayNameFor(Model => Model.Genres)
+			@Html.DisplayNameFor(Model => Model.MovieGenreMappings)
 		</dt>
+
 		<dd class="col-sm-10">
-		 @foreach (var genre in ViewBag.Genres) @* as List<CinemaTicket.Data.MovieGenre> //Phong ấn vì không dùng được 
-		{
-		// Tạo màu ngẫu nhiên (hoặc bạn có thể gán màu cụ thể cho từng genre)
-		var randomColor = String.Format("#{0:X6}", new Random().Next(0x1000000));
-		<a href="#" class="btn btn-default btn-xs"
-		   style="background-color: @randomColor;
-		  		color: white;" disabled>
-			@genre.GenreName
-		</a>
-		}
+			@foreach (var ge in Model.MovieGenreMappings)
+			{
+				var randomColor = String.Format("#{0:X6}", new Random().Next(0x1000000));
+				var textColor = GetTextColor(randomColor); // Lấy màu chữ phù hợp
+				<a href="#" class="btn btn-default btn-xs"
+				   style="background-color: @randomColor; color:@textColor;" disabled>
+					@ge.Genre.GenreName
+				</a>
+			}
 		</dd>
-		*@
+
 		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.Duration)
 		</dt>
 		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.Duration)
 		</dd>
+
 		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.Language)
 		</dt>
@@ -70,10 +70,27 @@
 		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.UpdatedAt)
 		</dd>
-
 	</dl>
+	<br />
+	<div>
+		<a asp-action="Edit" asp-route-id="@Model?.MovieId">Edit</a> |
+		<a asp-action="Index">Back to List</a>
+	</div>
+
 </div>
-<div>
-	<a asp-action="Edit" asp-route-id="@Model?.MovieId">Edit</a> |
-	<a asp-action="Index">Back to List</a>
-</div>
+@functions {
+	//TÍnh toán màu nên của genre và chọn màu chữ
+	public static string GetTextColor(string backgroundColor)
+	{
+		// Chuyển đổi mã màu hex thành giá trị RGB
+		int r = Convert.ToInt32(backgroundColor.Substring(1, 2), 16);
+		int g = Convert.ToInt32(backgroundColor.Substring(3, 2), 16);
+		int b = Convert.ToInt32(backgroundColor.Substring(5, 2), 16);
+
+		// Tính toán độ sáng (luminance)
+		double luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+		// Chọn màu chữ dựa trên độ sáng
+		return luminance > 0.5 ? "#000000" : "#FFFFFF";
+	}
+}

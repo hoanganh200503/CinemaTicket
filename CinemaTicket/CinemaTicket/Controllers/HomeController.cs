@@ -59,7 +59,6 @@ namespace CinemaTicket.Controllers
                     .Where(m => m.ReleaseDate <= today)
                     .OrderByDescending(m => m.ReleaseDate)
                     .ToListAsync();
-
                 return View(movies);
             }
             catch (Exception ex)
