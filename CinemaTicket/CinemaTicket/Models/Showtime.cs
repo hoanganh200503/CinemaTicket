@@ -2,9 +2,9 @@
 {
     public class Showtime
     {
-        public int ShowtimeID { get; set; }
-        public int MovieID { get; set; }
-        public int RoomID { get; set; }
+        public int ShowtimeId { get; set; }
+        public int MovieId { get; set; }
+        public int RoomId { get; set; }
         public DateTime ShowtimeDate { get; set; }
         public decimal Price { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;

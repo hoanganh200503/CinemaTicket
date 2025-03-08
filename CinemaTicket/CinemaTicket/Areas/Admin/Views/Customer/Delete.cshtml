@@ -1,0 +1,66 @@
+﻿@model CinemaTicketAdmin.Data.Customer
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Customers Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Customer Delete
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+<dl class="row">
+	<dt class="col-sm-2">
+		@Html.DisplayNameFor(model => model.Name)
+	</dt>
+	<dd class="col-sm-10">
+		@Html.DisplayFor(model => model.Name)
+	</dd>
+	<dt class="col-sm-2">
+		@Html.DisplayNameFor(model => model.Email)
+	</dt>
+	<dd class="col-sm-10">
+		@Html.DisplayFor(model => model.Email)
+	</dd>
+	<dt class="col-sm-2">
+		@Html.DisplayNameFor(model => model.Password)
+	</dt>
+	<dd class="col-sm-10">
+		@Html.DisplayFor(model => model.Password)
+	</dd>
+	<dt class="col-sm-2">
+		@Html.DisplayNameFor(model => model.Role)
+	</dt>
+	<dd class="col-sm-10">
+		@Html.DisplayFor(model => model.Role)
+	</dd>
+	<dt class="col-sm-2">
+		@Html.DisplayNameFor(model => model.CreatedAt)
+	</dt>
+	<dd class="col-sm-10">
+		@Html.DisplayFor(model => model.CreatedAt)
+	</dd>
+	<dt class="col-sm-2">
+		@Html.DisplayNameFor(model => model.UpdatedAt)
+	</dt>
+	<dd class="col-sm-10">
+		@Html.DisplayFor(model => model.UpdatedAt)
+	</dd>
+</dl>
+<form asp-action="Delete">
+	<input type="hidden" asp-for="CustomerId" />
+	<input type="submit" value="Delete" class="btn btn-danger mb-1" /> |
+	<a asp-action="Index">Back to List</a>
+</form>
+</div>

@@ -1,0 +1,81 @@
+﻿@model IEnumerable<CinemaTicketAdmin.Data.Movie>
+@{
+	ViewData["Title"] = "Movie List";
+}
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Movie Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Movie Table
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+<div class="app-content">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!-- Info boxes -->
+		<div class="row">
+			<div class="panel panel-default">
+				@* <div class="panel-heading"> *@
+				@* 	Movie Table *@
+				@* </div> *@
+				<div class="panel-body">
+					<a asp-action="Create"><button type="button" class="btn btn-success mb-1">Create New</button></a>
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+							<thead>
+								<tr>
+									<th width="110px">@Html.DisplayNameFor(model => model.Url)</th>
+									<th width="200px">@Html.DisplayNameFor(model => model.Title)</th>
+									<th width="150px">@Html.DisplayNameFor(model => model.UpdatedAt)</th>
+									<th width="150px">@Html.DisplayNameFor(model => model.CreatedAt)</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var item in Model)
+								{
+									<tr class="">
+										<td>
+											<img width="100" src="~/images/@Html.DisplayFor(modelItem => item.Url)" alt="Poster"
+												 onerror="this.src='/images/movie-placeholder.jpg'">
+										</td>
+										<td>@Html.DisplayFor(modelItem => item.Title)</td>
+										<td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
+										<td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+										<td>
+
+											<a asp-action="Edit" asp-route-id="@item.MovieId"><Button type="button" class="btn btn-warning mb-1">Edit</Button></a> |
+											<a asp-action="Details" asp-route-id="@item.MovieId"><Button tpye="button" class="btn btn-info mb-1">Details</Button></a> |
+											<a asp-action="Delete" asp-route-id="@item.MovieId"><Button type="button" class="btn btn-danger mb-1">Delete</Button></a>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--End Advanced Tables -->
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			$('#dataTables-example').dataTable();
+		});
+	</script>
+}

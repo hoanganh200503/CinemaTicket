@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+    <div class="card shadow-lg p-4" style="max-width: 450px; width: 100%; border-radius: 10px;">
+        <div class="text-center">
+            <h3 class="mt-3 font-weight-bold text-danger">Đăng nhập</h3>
+        </div>
+
+        <hr />
+
+        <!-- Hiển thị thông báo lỗi -->
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Error</div>
+        }
+
+        <form asp-action="DangNhap" method="post">
+            <!-- Email -->
+            <div class="form-group">
+                <label class="font-weight-bold">Email</label>
+                <input type="email" name="email" class="form-control rounded-pill px-3" placeholder="Nhập email" required />
+            </div>
+
+            <!-- Mật khẩu -->
+            <div class="form-group">
+                <label class="font-weight-bold">Mật khẩu</label>
+                <input type="password" name="password" class="form-control rounded-pill px-3" placeholder="Nhập mật khẩu" required />
+            </div>
+
+            <!-- Ghi nhớ đăng nhập -->
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="rememberMe" name="rememberMe">
+                <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
+            </div>
+
+            <!-- Nút đăng nhập -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger btn-lg w-100 rounded-pill">
+                    <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                </button>
+            </div>
+        </form>
+
+        <!-- Liên kết hỗ trợ -->
+        <div class="text-center mt-3">
+            <small>
+                Chưa có tài khoản? <a asp-action="Dangky" class="text-danger font-weight-bold">Đăng ký ngay!</a>
+            </small>
+            <br />
+            <small>
+                <a asp-action="ForgotPassword" asp-controller="Customer" class="text-muted">Quên mật khẩu?</a>
+            </small>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿@if (TempData["Status"]?.ToString() == "success")
+{
+    <div class="alert alert-success">
+        <h4>Thanh toán thành công!</h4>
+        <p>@TempData["Message"]</p>
+        <a href="/" class="btn btn-primary">Quay lại trang chủ</a>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <h4>Thanh toán thất bại!</h4>
+        <p>@TempData["Message"]</p>
+        <a href="/" class="btn btn-danger">Thử lại</a>
+    </div>
+}

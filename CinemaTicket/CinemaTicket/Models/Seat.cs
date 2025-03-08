@@ -2,8 +2,8 @@
 {
     public class Seat
     {
-        public int SeatID { get; set; }
-        public int RoomID { get; set; }
+        public int SeatId { get; set; }
+        public int RoomId { get; set; }
         public string SeatNumber { get; set; }
         public string SeatType { get; set; }
         public string Status { get; set; }

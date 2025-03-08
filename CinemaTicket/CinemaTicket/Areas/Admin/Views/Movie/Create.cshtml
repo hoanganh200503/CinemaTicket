@@ -1,0 +1,120 @@
+﻿@model CinemaTicketAdmin.Data.Movie
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Movie Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Add Movie
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+
+<hr />
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				Add movie
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6">
+						<h3>Movie</h3>
+						<form asp-action="Create" role="form" enctype="multipart/form-data">
+							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+							<div class="form-group">
+								<label asp-for="Url" class="control-label">Poster</label>
+
+								<input id="fileInput" asp-for="Url" type="file" name="file"
+									   value="@Model.Url"
+									   class="form-control" required />
+								<img id="imagePreview" src="~/images/@Model.Url" style=" display: @(string.IsNullOrEmpty(Model.Url) ? "none" : "block");  border-color: black; width: 200px; border: solid; border-width: medium; " />
+							</div>
+
+							<div class="form-group">
+								<label asp-for="Title" class="control-label">Title</label>
+								<input asp-for="Title" class="form-control" placeholder="Title" />
+								<span asp-validation-for="Title" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label asp-for="Duration" class="control-label"></label>
+								<input asp-for="Duration" class="form-control" />
+								<span asp-validation-for="Duration" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label asp-for="Language" class="control-label"></label>
+								<select asp-for="Language" class="form-control">
+									<option value="Dubbed">Dubbed</option>
+									<option value="Subtitled">Subtitled</option>
+								</select>
+								<span asp-validation-for="Language" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label asp-for="ReleaseDate" class="control-label"></label>
+								<input asp-for="ReleaseDate" class="form-control" type="date" asp-format="{0:MM/dd/yyyy}" />
+								<span asp-validation-for="ReleaseDate" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label asp-for="Description" class="control-label"></label>
+								<input asp-for="Description" class="form-control" height="" />
+								<span asp-validation-for="Description" class="text-danger"></span>
+							</div>
+							<div class="form-group">
+								<label class="control-label">Genres</label>
+								@foreach (var genre in ViewBag.Genres as List<CinemaTicketAdmin.Data.MovieGenre>)
+								{
+									<div class="form-check">
+										<input type="checkbox" name="selectedGenres" value="@genre.GenreId" class="form-check-input" />
+										<label class="form-check-label">@genre.GenreName</label>
+									</div>
+								}
+							</div>
+
+							<div class="form-group">
+								<input type="submit" value="Create" class="btn btn-success mb-1" />
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+	<script>
+		document.getElementById('fileInput').addEventListener('change', function (event) {
+			const file = event.target.files[0];
+			const imagePreview = document.getElementById('imagePreview');
+
+			if (file) {
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					imagePreview.src = e.target.result;
+					imagePreview.style.display = 'block';
+				}
+				reader.readAsDataURL(file);
+			} else {
+				imagePreview.src = '';
+				imagePreview.style.display = 'none';
+			}
+		});
+	</script>
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

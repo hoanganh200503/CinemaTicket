@@ -1,0 +1,188 @@
+﻿<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Dashboard</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Dashboard
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+
+<div class="app-content">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!-- Info boxes -->
+		<div class="row">
+			<div class="col-12 col-sm-6 col-md-3">
+				<div class="info-box">
+					<span class="info-box-icon text-bg-primary shadow-sm"> <i class="bi bi-chat-fill"></i> </span>
+					<div class="info-box-content">
+						<span class="info-box-text">Total Review</span> <span class="info-box-number">
+							333
+						</span>
+					</div> <!-- /.info-box-content -->
+				</div> <!-- /.info-box -->
+			</div> <!-- /.col -->
+			<div class="col-12 col-sm-6 col-md-3">
+				<div class="info-box">
+					<span class="info-box-icon text-bg-danger shadow-sm"> <i class="bi bi-hand-thumbs-up-fill"></i> </span>
+					<div class="info-box-content"> <span class="info-box-text"> Rating Average</span> <span class="info-box-number">3,8</span> </div> <!-- /.info-box-content -->
+				</div> <!-- /.info-box -->
+			</div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
+			<div class="col-12 col-sm-6 col-md-3">
+				<div class="info-box">
+					<span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-cart-fill"></i> </span>
+					<div class="info-box-content"> <span class="info-box-text">Ticket Purchased</span> <span class="info-box-number">760</span> </div> <!-- /.info-box-content -->
+				</div> <!-- /.info-box -->
+			</div> <!-- /.col -->
+			<div class="col-12 col-sm-6 col-md-3">
+				<div class="info-box">
+					<span class="info-box-icon text-bg-warning shadow-sm"> <i class="bi bi-people-fill"></i> </span>
+					<div class="info-box-content"> <span class="info-box-text">New Members</span> <span class="info-box-number">2,000</span> </div> <!-- /.info-box-content -->
+				</div> <!-- /.info-box -->
+			</div> <!-- /.col -->
+		</div>
+
+
+
+		<!-- Hot movie LIST -->
+		<div class="row">
+			<div class="col-12 col-sm-6 col-md-8">
+
+
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Hot Movie</h3>
+						<div class="card-tools"> <button type="button" class="btn btn-tool" data-lte-toggle="card-collapse"> <i data-lte-icon="expand" class="bi bi-plus-lg"></i> <i data-lte-icon="collapse" class="bi bi-dash-lg"></i> </button> <button type="button" class="btn btn-tool" data-lte-toggle="card-remove"> <i class="bi bi-x-lg"></i> </button> </div>
+					</div> <!-- /.card-header -->
+					<div class="card-body p-0">
+						<div class="px-2">
+							@*For loop here*@
+							<div class="d-flex border-top py-2 px-1">
+								<!--Get movie poster here-->
+								<div class="col-2">
+									<img src="~/images/BacKimThang2.jpg"
+										 alt="Movie Image" class="img-size-50">
+								</div>
+								<div class="col-10">
+									<a href="javascript:void(0)" class="fw-bold">
+										<!--Name Movie Here-->Bac Kim Thang
+										<span class="badge text-bg-warning float-end">
+											<!--Rating here-->5.1
+										</span>
+									</a>
+									<div class="text-truncate">
+										<!--Description here-->Bộ phim kinh dị Việt Nam kể về những ám ảnh kinh hoàng trong giấc mơ.2
+									</div>
+								</div>
+							</div> <!-- /.item -->
+							@*End for loop Here*@
+							<!--Example other movie-->
+							<div class="d-flex border-top py-2 px-1">
+								<div class="col-2"> <img src="~/images/BoGia.jpg" alt="Movie Image" class="img-size-50"> </div>
+								<div class="col-10">
+									<a href="javascript:void(0)" class="fw-bold">
+										Bo Gia
+										<span class="badge text-bg-success float-end">
+											3.3
+										</span>
+									</a>
+									<div class="text-truncate">
+										Phim hài cảm động về tình cảm gia đình giữa một ông bố già và con trai.
+									</div>
+								</div>
+							</div> <!-- /.item -->
+						</div>
+					</div> <!-- /.card-body -->
+					<div class="card-footer text-center">
+						<a asp-action="Index" asp-controller="Movie" asp-area="Admin" class="uppercase">
+							View All Movies
+						</a>
+					</div> <!-- /.card-footer -->
+				</div> <!-- /.card -->
+
+
+			</div> <!-- /.col -->
+
+
+			<div class="col-11 col-sm-5 col-md-4">
+				<div class="card mb-4">
+					<div class="card-header">
+						<h3 class="card-title">Genre Watching</h3>
+						<div class="card-tools">
+							<button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
+								<i data-lte-icon="expand" class="bi bi-plus-lg"></i>
+								<i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
+							</button>
+							<button type="button" class="btn btn-tool" data-lte-toggle="card-remove">
+								<i class="bi bi-x-lg"></i>
+							</button>
+						</div>
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body">
+						<!--begin::Row-->
+						<div class="row">
+							<div class="col-12">
+								<div id="pie-chart"></div>
+							</div>
+							<!-- /.col -->
+						</div>
+						<!--end::Row-->
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- /.footer -->
+			</div>		<!-- /.col -->
+		</div>		<!-- /.row -->
+		<!-- /.card -->
+	</div> <!--end::Row-->
+</div> <!--end::Container-->
+@section Scripts {
+	<script>
+	//-------------
+		// - PIE CHART -
+		//-------------
+
+		const pie_chart_options = {
+			series: [700, 500, 400, 600, 300, 100],
+			chart: {
+				type: "donut",
+			},
+							labels: ["Horror", "Comedy", "Action", "Safari", "romance", "Other"],
+			dataLabels: {
+				enabled: false,
+			},
+			colors: [
+				"#0d6efd",
+				"#20c997",
+				"#ffc107",
+				"#d63384",
+				"#6f42c1",
+				"#adb5bd",
+			],
+		};
+
+		const pie_chart = new ApexCharts(
+			document.querySelector("#pie-chart"),
+			pie_chart_options,
+		);
+		pie_chart.render();
+
+		//-----------------
+		// - END PIE CHART -
+		//-----------------
+		</script>
+}

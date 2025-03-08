@@ -1,0 +1,105 @@
+﻿ @model CinemaTicketAdmin.Data.Movie
+
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Movie Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Update Movie
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="Edit" role="form" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="MovieId" />
+			<div class="form-group">
+				<label asp-for="Title" class="control-label"></label>
+				<input asp-for="Title" class="form-control" />
+				<span asp-validation-for="Title" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Url" class="control-label">Poster</label>
+				@if (!string.IsNullOrEmpty(Model.Url))
+				{
+					<img src="~/images/@Model.Url" width="100" />
+				}
+				else
+				{
+					<img src="~/images/movie-placeholder.jpg" width="100" />
+				}
+				<input asp-for="Title" type="file" name="file"
+					   value="@Model.Url"
+					   class="form-control" required />
+			</div>
+			<div class="form-group">
+				<label asp-for="Duration" class="control-label"></label>
+				<input asp-for="Duration" class="form-control" />
+				<span asp-validation-for="Duration" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Language" class="control-label"></label>
+				<select asp-for="Language" class="form-control">
+					<option value="Dubbed">Dubbed</option>
+					<option value="Subtitled">Subtitled</option>
+				</select>
+				<span asp-validation-for="Language" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="ReleaseDate" class="control-label"></label>
+				<input asp-for="ReleaseDate" class="form-control" type="date" />
+				<span asp-validation-for="ReleaseDate" class="text-danger"></span>
+			</div>
+
+			<div class="form-group">
+				<label asp-for="Description" class="control-label"></label>
+				<input asp-for="Description" class="form-control" />
+				<span asp-validation-for="Description" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label class="control-label">Genres</label>
+				@if (ViewBag.Genres != null)
+				{
+					foreach (var genre in ViewBag.Genres as List<CinemaTicketAdmin.Data.MovieGenre>)
+					{
+						<div class="form-check">
+							<input type="checkbox" name="selectedGenres" value="@genre.GenreId" class="form-check-input" />
+							@(Model.MovieGenreMappings.Any(mg => mg.GenreId == genre.GenreId) ? "checked" : "")
+							<label class="form-check-label">@genre.GenreName</label>
+						</div>
+					}
+				}
+
+			</div>
+
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-success mb-1" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

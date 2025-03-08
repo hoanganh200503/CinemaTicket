@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CinemaTicketApp.Models.Customer>
+﻿@model IEnumerable<CinemaTicket.Data.Customer>
 
 <h2>Danh sách khách hàng</h2>
 <table class="table">
@@ -14,7 +14,7 @@
         @foreach (var customer in Model)
         {
             <tr>
-                <td>@customer.CustomerID</td>
+                <td>@customer.CustomerId</td>
                 <td>@customer.Name</td>
                 <td>@customer.Email</td>
                 <td>@customer.Role</td>
