@@ -5,7 +5,7 @@
 	<div class="sidebar-brand">
 		<!--begin::Brand Link-->
 
-		<a asp-action="AdminPage" asp-controller="Admin" asp-area="Admin" class="brand-link">
+		<a asp-action="AdminPage" asp-controller="Admin" class="brand-link">
 			<!--begin::Brand Image-->
 			<img src="~/AdminTLE/dist/assets/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image opacity-75 shadow">
 			<!--end::Brand Image-->
@@ -20,7 +20,7 @@
 			<!--begin::Sidebar Menu-->
 			<ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
 				<li class="nav-item menu-open">
-					<a asp-action="AdminPage" asp-controller="Admin" asp-area="Admin" class="nav-link active">
+					<a asp-action="AdminPage" asp-controller="Admin" class="nav-link active">
 						<i class="nav-icon bi bi-speedometer"></i>
 						<p>
 							Dashboard
@@ -29,7 +29,7 @@
 
 				<li class="nav-header">Managements</li>
 				<li class="nav-item">
-					<a asp-action="Index" asp-controller="Movie" asp-area="Admin" class="nav-link">
+					<a asp-action="Index" asp-controller="MovieManagement" class="nav-link">
 						<i class="nav-icon bi bi-circle-fill"></i>
 						<p>Movie</p>
 					</a>
@@ -83,7 +83,7 @@
 					</ul>
 				</li>
 				<li class="nav-item">
-					<a asp-action="Index" asp-controller="Customer" asp-area="Admin" class="nav-link">
+					<a asp-action="Index" asp-controller="CustomerManagement" class="nav-link">
 						<i class="nav-icon bi bi-circle-fill"></i>
 						<p>Account</p>
 					</a>

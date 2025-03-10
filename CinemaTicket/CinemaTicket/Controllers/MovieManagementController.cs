@@ -1,23 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CinemaTicketAdmin.Data;
+using CinemaTicket.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-
-namespace CinemaTicketAdmin.Areas.Admin.Controllers
+namespace CinemaTicket.Controllers
 {
-    [Area("Admin")]
-    public class MovieController : Controller
+    public class MovieManagementController : Controller
     {
-        private readonly CinemaTicketAdminDbContext _context;
+        private readonly CinemaTicketDbContext _context;
 
-        public MovieController(CinemaTicketAdminDbContext context)
+        public MovieManagementController(CinemaTicketDbContext context)
         {
             _context = context;
         }
 
-        // GET: MovieController
+        // GET: MoviemanagementController
         public async Task<IActionResult> Index()
         {
             var movie = await _context.Movies
@@ -127,6 +125,7 @@ namespace CinemaTicketAdmin.Areas.Admin.Controllers
             ViewBag.Genres = await _context.MovieGenres.ToListAsync();
             return View(movie);
         }
+
 
         // POST: Movie/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

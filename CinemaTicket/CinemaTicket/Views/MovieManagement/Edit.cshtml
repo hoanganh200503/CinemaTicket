@@ -1,4 +1,9 @@
-﻿ @model CinemaTicketAdmin.Data.Movie
+﻿ @model CinemaTicket.Data.Movie
+@{
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
 
 <!--begin::App Content Header-->
 <div class="app-content-header">
@@ -75,7 +80,7 @@
 				<label class="control-label">Genres</label>
 				@if (ViewBag.Genres != null)
 				{
-					foreach (var genre in ViewBag.Genres as List<CinemaTicketAdmin.Data.MovieGenre>)
+					foreach (var genre in ViewBag.Genres as List<CinemaTicket.Data.MovieGenre>)
 					{
 						<div class="form-check">
 							<input type="checkbox" name="selectedGenres" value="@genre.GenreId" class="form-check-input" />

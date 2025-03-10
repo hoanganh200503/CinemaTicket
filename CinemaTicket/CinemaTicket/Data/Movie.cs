@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace CinemaTicket.Data;
 
@@ -21,9 +22,10 @@ public partial class Movie
 
     public DateTime? UpdatedAt { get; set; }
 
+    [DisplayName("Poster")]
     public string? Url { get; set; }
 
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
-
-    public virtual ICollection<MovieGenre> Genres { get; set; } = new List<MovieGenre>();
+    [DisplayName("Genre")]
+    public virtual ICollection<MovieGenreMapping> MovieGenreMappings { get; set; } = new List<MovieGenreMapping>();
 }

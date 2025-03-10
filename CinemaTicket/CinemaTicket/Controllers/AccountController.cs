@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 
-namespace CinemaTicketApp.Controllers     //Đổi lại namespace (cũ  CinemaTicketApp.Controllers)
+namespace CinemaTicket.Controllers     //Đổi lại namespace (cũ  CinemaTicketApp.Controllers)
 {
     public class AccountController : Controller
     {

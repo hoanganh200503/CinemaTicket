@@ -9,5 +9,5 @@ public partial class MovieGenre
 
     public string GenreName { get; set; } = null!;
 
-    public virtual ICollection<Movie> Movies { get; set; } = new List<Movie>();
+    public virtual ICollection<MovieGenreMapping> MovieGenreMappings { get; set; } = new List<MovieGenreMapping>();
 }

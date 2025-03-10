@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Threading.Tasks;
-namespace CinemaTicketApp.Service
+namespace CinemaTicket.Services
 {
     public class EmailService
     {

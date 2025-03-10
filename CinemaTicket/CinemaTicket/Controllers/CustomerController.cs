@@ -4,9 +4,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using CinemaTicketApp.Service;
+using CinemaTicket.Services;
 
-namespace CinemaTicketApp.Controllers
+namespace CinemaTicket.Controllers
 {
 
     public class CustomerController : Controller

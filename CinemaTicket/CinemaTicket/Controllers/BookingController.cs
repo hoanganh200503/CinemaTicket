@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CinemaTicket.Data;
 using System.Linq;
-using CinemaTicketApp.Data;
 using Newtonsoft.Json;
 using CinemaTicket.Services;
 using CinemaTicket.VNPAY;
@@ -9,9 +8,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using System.Text.Json;
-using CinemaTicketApp.Service;
 
-namespace CinemaTicketApp.Controllers
+namespace CinemaTicket.Controllers
 {
     public class BookingController : Controller
     {
@@ -38,7 +36,7 @@ namespace CinemaTicketApp.Controllers
             {
                 return NotFound();
             }
-            var movie = _context.Movies.Include(v=>v.Genres).FirstOrDefault(m => m.MovieId == movieId);
+            var movie = _context.Movies.Include(v=>v.MovieGenreMappings).FirstOrDefault(m => m.MovieId == movieId);
             if (movie == null)
             {
                 return NotFound("Không tìm thấy phim." + movieId);

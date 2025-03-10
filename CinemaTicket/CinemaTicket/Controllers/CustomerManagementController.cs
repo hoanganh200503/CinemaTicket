@@ -5,16 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using CinemaTicketAdmin.Data;
+using CinemaTicket.Data;
 
-namespace CinemaTicket.Areas.Admin.Controllers
+namespace CinemaTicket.Controllers
 {
-    [Area("Admin")]
-    public class CustomerController : Controller
+    public class CustomerManagementController : Controller
     {
-        private readonly CinemaTicketAdminDbContext _context;
+        private readonly CinemaTicketDbContext _context;
 
-        public CustomerController(CinemaTicketAdminDbContext context)
+        public CustomerManagementController(CinemaTicketDbContext context)
         {
             _context = context;
         }
@@ -59,8 +58,6 @@ namespace CinemaTicket.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(customer);
-                customer.CreatedAt = DateTime.Now;
-                customer.UpdatedAt = DateTime.Now;
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CinemaTicketAdmin.Data;
+namespace CinemaTicket.Data;
 
 public partial class MovieGenreMapping
 {
     public int MovieId { get; set; }
     public int GenreId { get; set; }
-
+    public string? GenreName { get; set; }
+    public string? Title { get; set; }
     public virtual Movie Movie { get; set; } = null!;
     public virtual MovieGenre Genre { get; set; } = null!;
 }

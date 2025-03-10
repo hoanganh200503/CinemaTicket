@@ -45,11 +45,11 @@
                         <p><i class="bi bi-calendar3 text-danger"></i> <strong>Ngày phát hành:</strong> @movie.ReleaseDate.ToString("dd/MM/yyyy")</p>
                         <p><i class="bi bi-info-circle-fill text-secondary"></i> <strong>Mô tả:</strong> @movie.Description</p>
 
-                        @if (movie.Genres.Any())
+                        @if (movie.MovieGenreMappings.Any())
                         {
                             <p>
                                 <i class="bi bi-tags text-info"></i> <strong>Thể loại:</strong>
-                                @Html.Raw(string.Join(" ", movie.Genres.Select(g => $"<span class='badge bg-secondary'>{g.GenreName}</span>")))
+                                @Html.Raw(string.Join(" ", movie.MovieGenreMappings.Select(g => $"<span class='badge bg-secondary'>{g.GenreName}</span>")))
                             </p>
                         }
 
