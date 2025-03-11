@@ -36,7 +36,7 @@
 							<p class="card-text">Thời lượng: @movie.Duration phút</p>
 							<p class="card-text">
 								<small class="text-muted">
-									Thể loại: @string.Join(", ", movie.MovieGenreMappings.Select(g => g.GenreName))
+									Thể loại: @string.Join(", ", movie.MovieGenreMappings.Select(g => g.MovieGenre.GenreName)) <!--Sửa g.MovieGenre.GenreName-->
 								</small>
 							</p>
 							<p class="card-text">
