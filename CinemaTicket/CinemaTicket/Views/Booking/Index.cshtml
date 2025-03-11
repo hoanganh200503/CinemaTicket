@@ -49,7 +49,7 @@
                         {
                             <p>
                                 <i class="bi bi-tags text-info"></i> <strong>Thể loại:</strong>
-                                @Html.Raw(string.Join(" ", movie.MovieGenreMappings.Select(g => $"<span class='badge bg-secondary'>{g.MovieGenre.GenreName}</span>")))
+                                @Html.Raw(string.Join(" ", movie.MovieGenreMappings.Select(g => $"<span class='badge bg-secondary'>{g.MovieGenre.GenreName}</span>"))) <!-- change g.GenreName to g.MovieGenre.GenreName -->
                             </p>
                         }
 
