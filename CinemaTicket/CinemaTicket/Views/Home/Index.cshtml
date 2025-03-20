@@ -1,4 +1,4 @@
-@model IEnumerable<CinemaTicket.Data.Movie>
+@model IEnumerable<CinemaTicket.Models.Movie>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -131,7 +131,7 @@
                                                  onerror="this.src='/images/movie-placeholder.jpg'">
                                             <div class="card-body">
                                                 <h5 class="card-title">@movie.Title</h5>
-                                                <p class="card-text text-muted">@string.Join(", ", movie.MovieGenreMappings.Select(g => g.GenreName))</p>
+                                                <p class="card-text text-muted">@string.Join(", ", movie.MovieGenreMappings.Select(g => g.MovieGenre.GenreName))</p> <!--sửa g.MovieGenre.GenreName-->
                                                 <a href="#" class="btn btn-primary btn-sm">Đặt Vé</a>
                                             </div>
                                         </div>

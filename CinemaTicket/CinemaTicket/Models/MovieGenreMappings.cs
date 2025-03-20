@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace CinemaTicket.Models;
+
+public partial class MovieGenreMapping
+{
+    public int MovieId { get; set; }
+    public int GenreId { get; set; }
+    public virtual Movie Movie { get; set; } = null!;
+    public virtual MovieGenre MovieGenre { get; set; } = null!;
+}

@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model CinemaTicket.Data.Customer
+@model CinemaTicket.Models.Customer
 
 @{
     ViewData["Title"] = "Chỉnh sửa thông tin";
@@ -15,7 +15,7 @@
         <div class="col-md-3">
             <div class="text-center mb-3">
                 <h4>@Model.Name</h4>
-				<p class="text-muted">THÀNH VIÊN TỪ @Model.CreatedAt.("MM/yyyy")</p> <!-- Format date bỏ Tostring  do lỗi-->
+                <p class="text-muted">THÀNH VIÊN TỪ @Model.CreatedAt
             </div>
             <div class="list-group">
                 <a asp-action="Profile" class="list-group-item list-group-item-action">Thông tin chung</a>
@@ -32,14 +32,15 @@
                     <h5 class="mb-0">CHỈNH SỬA THÔNG TIN</h5>
                 </div>
                 <div class="card-body">
-                    <form method="post">
-                        @if (!ViewData.ModelState.IsValid)
-                        {
-                            <div class="alert alert-danger">
-                                @Html.ValidationSummary()
-                            </div>
-                        }
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="successMessage">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
 
+                    <form method="post">
                         <div class="mb-3">
                             <label class="form-label">Họ và tên</label>
                             <input type="text" class="form-control" name="name" value="@Model.Name" required>
@@ -52,10 +53,11 @@
 
                         <div class="mb-3">
                             <label class="form-label">Đổi mật khẩu?</label>
-                            <select class="form-select" id="changePassword" onchange="togglePasswordFields()">
-                                <option value="no" selected>Không</option>
-                                <option value="yes">Có</option>
+                            <select class="form-select" id="changePassword" name="changePassword" onchange="togglePasswordFields()">
+                                <option value="no" selected="@(ViewData["OpenPasswordChange"] as bool? == true ? "false" : "true")">Không</option>
+                                <option value="yes" selected="@(ViewData["OpenPasswordChange"] as bool? == true ? "true" : "false")">Có</option>
                             </select>
+
                         </div>
 
                         <div id="passwordFields" style="display: none;">
@@ -67,6 +69,12 @@
                                         <i class="bi bi-eye" id="currentPassword-icon"></i>
                                     </button>
                                 </div>
+                                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("currentPassword"))
+                                {
+                                    <div class="text-danger small mt-1">
+                                        @Html.ValidationMessage("currentPassword")
+                                    </div>
+                                }
                             </div>
 
                             <div class="mb-3">
@@ -77,6 +85,12 @@
                                         <i class="bi bi-eye" id="newPassword-icon"></i>
                                     </button>
                                 </div>
+                                @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey("newPassword"))
+                                {
+                                    <div class="text-danger small mt-1">
+                                        @Html.ValidationMessage("newPassword")
+                                    </div>
+                                }
                             </div>
                         </div>
 
@@ -93,6 +107,16 @@
 
 @section Scripts {
     <script>
+        // Ẩn thông báo thành công sau 3 giây
+        document.addEventListener('DOMContentLoaded', function() {
+            var successMessage = document.getElementById('successMessage');
+            if (successMessage) {
+                setTimeout(function() {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+
         function togglePasswordFields() {
             var changePassword = document.getElementById('changePassword');
             var passwordFields = document.getElementById('passwordFields');
@@ -114,16 +138,20 @@
             }
         }
 
-        // Tự động mở phần đổi mật khẩu nếu được yêu cầu
-        @if (ViewData["OpenPasswordChange"] != null && (bool)ViewData["OpenPasswordChange"])
-        {
-            <text>
-                document.addEventListener('DOMContentLoaded', function() {
-                    var changePassword = document.getElementById('changePassword');
-                    changePassword.value = 'yes';
-                    togglePasswordFields();
-                });
-            </text>
-        }
+        // Khi load lại trang, giữ nguyên trạng thái "Đổi mật khẩu?"
+        document.addEventListener("DOMContentLoaded", function () {
+            var changePasswordSelect = document.getElementById("changePassword");
+            var passwordFields = document.getElementById("passwordFields");
+
+            var isPasswordChangeSelected = "@(ViewData["OpenPasswordChange"] as bool? == true ? "yes" : "no")";
+
+            changePasswordSelect.value = isPasswordChangeSelected;
+
+            // Hiển thị hoặc ẩn phần nhập mật khẩu theo lựa chọn
+            togglePasswordFields();
+        });
+
     </script>
+}
+
 }

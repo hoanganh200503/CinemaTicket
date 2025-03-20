@@ -1,4 +1,4 @@
-﻿ @model CinemaTicket.Data.Movie
+﻿ @model CinemaTicket.Models.Movie
 @{
 	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -54,7 +54,7 @@
 					var textColor = GetTextColor(randomColor); // Lấy màu chữ phù hợp
 					<a href="#" class="btn btn-default btn-xs"
 					   style="background-color: @randomColor; color:@textColor;" disabled>
-						@ge.Genre.GenreName
+						@ge.MovieGenre.GenreName
 					</a>
 				}
 			}

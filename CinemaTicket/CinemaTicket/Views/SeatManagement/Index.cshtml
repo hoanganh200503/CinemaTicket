@@ -1,0 +1,82 @@
+@model IEnumerable<CinemaTicket.Models.Seat>
+
+@{
+    ViewData["Title"] = "Seat Management";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Seat Management</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/RoomManagement">Rooms</a></li>
+        <li class="breadcrumb-item active">Seats</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div><i class="fas fa-chair me-1"></i> Seats List</div>
+                <a asp-action="Create" asp-route-roomId="@ViewBag.RoomId" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create New
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped table-hover" id="seatsTable">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.SeatNumber)</th>
+                        <th>@Html.DisplayNameFor(model => model.Status)</th>
+                        <th>@Html.DisplayNameFor(model => model.Room.RoomName)</th>
+                        <th>@Html.DisplayNameFor(model => model.SeatType.TypeName)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.SeatNumber)</td>
+                            <td>
+                                @if (item.Status == "Active")
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.Room.RoomName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SeatType.TypeName)</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Edit" asp-route-id="@item.SeatId" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.SeatId" class="btn btn-info btn-sm">
+                                        <i class="fas fa-info-circle"></i> Details
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.SeatId" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#seatsTable').DataTable({
+                "order": [[0, "asc"]]
+            });
+        });
+    </script>
+}

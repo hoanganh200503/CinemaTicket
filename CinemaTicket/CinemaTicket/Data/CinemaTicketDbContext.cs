@@ -97,7 +97,7 @@ public partial class CinemaTicketDbContext : DbContext
             entity.Property(e => e.GenreName).HasMaxLength(100);
 
             entity.HasMany(d => d.MovieGenreMappings)
-                .WithOne(p => p.Genre)
+                .WithOne(p => p.MovieGenre)
                 .HasForeignKey(d => d.GenreId)
                 .HasConstraintName("FK__MovieGenr__Genre__5EBF139D");
         });

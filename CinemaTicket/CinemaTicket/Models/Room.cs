@@ -1,10 +1,22 @@
-﻿namespace CinemaTicketApp.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace CinemaTicket.Models;
+
+public partial class Room
 {
-    public class Room
-    {
-        public int RoomId { get; set; }
-        public string RoomName { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-    }
+    public int RoomId { get; set; }
+
+    public string RoomName { get; set; } = null!;
+
+    public int Cols { get; set; }
+    public int Rows { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public virtual ICollection<Seat> Seats { get; set; } = new List<Seat>();
+
+    public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
 }

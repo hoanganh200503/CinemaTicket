@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CinemaTicket.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using CinemaTicket.Services;
+using CinemaTicket.Models;
 
 namespace CinemaTicket.Controllers
 {

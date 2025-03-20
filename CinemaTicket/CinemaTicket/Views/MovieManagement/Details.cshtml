@@ -1,4 +1,4 @@
-﻿ @model CinemaTicket.Data.Movie
+﻿ @model CinemaTicket.Models.Movie
 @{
 	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -59,7 +59,7 @@
 				var randomColor = String.Format("#{0:X6}", new Random().Next(0x1000000));
 				var textColor = GetTextColor(randomColor);
 				<a href="#" class="btn btn-default btn-xs" style="background-color: @randomColor; color:@textColor" disabled>
-					@ge.Genre.GenreName.ToString()
+					@ge.MovieGenre.GenreName.ToString()
 				</a>
 			}
 			</br>

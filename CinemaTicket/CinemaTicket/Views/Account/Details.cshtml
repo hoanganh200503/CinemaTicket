@@ -3,7 +3,7 @@
 *@
 @{
 }
-@model CinemaTicket.Data.Customer 
+@model CinemaTicket.Models.Customer
 @* sửa model theo ông T anh*@
 
 @{
@@ -16,7 +16,7 @@
         <div class="col-md-3">
             <div class="text-center mb-3">
                 <h4>@Model.Name</h4>
-                <p class="text-muted">THÀNH VIÊN TỪ @Model.CreatedAt.("MM/yyyy")</p> <!-- Format date bỏ Tostring  do lỗi-->
+                <p class="text-muted">THÀNH VIÊN TỪ @Model.CreatedAt</p> <!-- Format date bỏ Tostring  do lỗi-->
             </div>
             <div class="list-group">
                 <a asp-action="Profile" class="list-group-item list-group-item-action">Thông tin chung</a>
@@ -31,7 +31,13 @@
             <div class="card">
                 <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">CHI TIẾT TÀI KHOẢN</h5>
-                    <a href="@Url.Action("Edit", "Account")" class="custom-red btn">Chỉnh sửa thông tin</a>
+                    <a href="@Url.Action("Edit", "Account")" class="btn"
+                       style="background-color: darkred; color: white; transition: 0.3s;
+          border-radius: 5px; padding: 10px 15px;"
+                       onmouseover="this.style.backgroundColor='brown'"
+                       onmouseout="this.style.backgroundColor='darkred'">
+                        Chỉnh sửa thông tin
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -59,11 +65,11 @@
                             <h6 class="card-title">THÔNG TIN TÀI KHOẢN</h6>
                             <div class="mb-3">
                                 <label class="text-muted">Ngày tạo:</label>
-                                <div>@Model.CreatedAt.("dd/MM/yyyy HH:mm")</div><!--Bỏ ToString do lỗi-->
+                                <div>@Model.CreatedAt</div><!--Bỏ ToString do lỗi-->
                             </div>
                             <div class="mb-3">
                                 <label class="text-muted">Cập nhật:</label>
-                                <div>@Model.UpdatedAt.("dd/MM/yyyy HH:mm")</div><!--Bỏ ToString do lỗi-->
+                                <div>@Model.UpdatedAt</div><!--Bỏ ToString do lỗi-->
                             </div>
                             <div class="mb-3">
                                 <label class="text-muted">Trạng thái:</label>

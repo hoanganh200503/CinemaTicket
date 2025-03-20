@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CinemaTicket.ViewModels.DashboardViewModel
+@{
 	Layout= "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -35,27 +36,28 @@
 					<span class="info-box-icon text-bg-primary shadow-sm"> <i class="bi bi-chat-fill"></i> </span>
 					<div class="info-box-content">
 						<span class="info-box-text">Total Review</span> <span class="info-box-number">
-							333
+							@Model.TotalReviews
 						</span>
 					</div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col -->
-			<div class="col-12 col-sm-6 col-md-3">
+
+			<div  class="col-12 col-sm-6 col-md-3">
 				<div class="info-box">
 					<span class="info-box-icon text-bg-danger shadow-sm"> <i class="bi bi-hand-thumbs-up-fill"></i> </span>
-					<div class="info-box-content"> <span class="info-box-text"> Rating Average</span> <span class="info-box-number">3,8</span> </div> <!-- /.info-box-content -->
+					<div class="info-box-content"> <span class="info-box-text"> Rating Average</span> <span class="info-box-number">@Model.RatingAverage</span> </div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
 			<div class="col-12 col-sm-6 col-md-3">
 				<div class="info-box">
 					<span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-cart-fill"></i> </span>
-					<div class="info-box-content"> <span class="info-box-text">Ticket Purchased</span> <span class="info-box-number">760</span> </div> <!-- /.info-box-content -->
+					<div class="info-box-content"> <span class="info-box-text">Ticket Purchased</span> <span class="info-box-number">@Model.TicketPurchased</span> </div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col -->
 			<div class="col-12 col-sm-6 col-md-3">
 				<div class="info-box">
 					<span class="info-box-icon text-bg-warning shadow-sm"> <i class="bi bi-people-fill"></i> </span>
-					<div class="info-box-content"> <span class="info-box-text">New Members</span> <span class="info-box-number">2,000</span> </div> <!-- /.info-box-content -->
+					<div class="info-box-content"> <span class="info-box-text">Total Members</span> <span class="info-box-number">@Model.TotalMembers</span> </div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col -->
 		</div>
@@ -75,24 +77,26 @@
 					<div class="card-body p-0">
 						<div class="px-2">
 							@*For loop here*@
+							@foreach(var movie in Model.hotMovies){
 							<div class="d-flex border-top py-2 px-1">
 								<!--Get movie poster here-->
 								<div class="col-2">
-									<img src="~/images/BacKimThang2.jpg"
-										 alt="Movie Image" class="img-size-50">
+									<img src="~/images/@movie.Url"
+											 alt="Poster" onerror="this.src='/images/movie-placeholder.jpg'" class="img-size-50">
 								</div>
 								<div class="col-10">
 									<a href="javascript:void(0)" class="fw-bold">
-										<!--Name Movie Here-->Bac Kim Thang
+										<!--Name Movie Here-->@movie.Title
 										<span class="badge text-bg-warning float-end">
-											<!--Rating here-->5.1
+											<!--Rating here-->@movie.Duration
 										</span>
 									</a>
 									<div class="text-truncate">
-										<!--Description here-->Bộ phim kinh dị Việt Nam kể về những ám ảnh kinh hoàng trong giấc mơ.2
+										<!--Description here-->@movie.Description
 									</div>
 								</div>
 							</div> <!-- /.item -->
+							}
 							@*End for loop Here*@
 							<!--Example other movie-->
 							<div class="d-flex border-top py-2 px-1">
@@ -122,11 +126,11 @@
 			</div> <!-- /.col -->
 
 
-			<div class="col-11 col-sm-5 col-md-4">
+			<div  class="col-11 col-sm-5 col-md-4">
 				<div class="card mb-4">
 					<div class="card-header">
 						<h3 class="card-title">Genre Watching</h3>
-						<div class="card-tools">
+						<div id="chart" class="card-tools">
 							<button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
 								<i data-lte-icon="expand" class="bi bi-plus-lg"></i>
 								<i data-lte-icon="collapse" class="bi bi-dash-lg"></i>

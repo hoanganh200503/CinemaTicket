@@ -1,0 +1,67 @@
+@model CinemaTicket.Models.Seat
+@{
+    ViewData["Title"] = "Create Seat";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Create Seat</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Admin">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="/RoomManagement">Rooms</a></li>
+        <li class="breadcrumb-item"><a asp-action="Index" asp-route-roomId="@ViewBag.RoomId">Seats</a></li>
+        <li class="breadcrumb-item active">Create</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-chair me-1"></i>
+            Create New Seat
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        
+                        @* <div class="form-group"> *@
+                        @*     <label asp-for="RoomId" class="control-label"></label> *@
+                        @*     <select asp-for="RoomId" class="form-control" asp-items="@(ViewData["RoomId"] as SelectList)"></select> *@
+
+                        @* </div> *@
+                        
+                        <div class="form-group mb-3">
+                            <label asp-for="SeatNumber" class="control-label"></label>
+                            <input asp-for="SeatNumber" class="form-control" />
+                            <span asp-validation-for="SeatNumber" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="SeatTypeId" class="control-label"></label>
+                            <select asp-for="SeatTypeId" class="form-control" asp-items="@(ViewData["SeatTypeId"] as SelectList)"></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Status" class="control-label"></label>
+                            <select asp-for="Status" class="form-control" asp-items="@(ViewData["Status"] as SelectList)"></select>
+                        </div>
+
+                            <br/>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Create
+                            </button>
+                            <a asp-action="Index" asp-route-roomId="@ViewBag.RoomId" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

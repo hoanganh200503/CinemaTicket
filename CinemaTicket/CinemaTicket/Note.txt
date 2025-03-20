@@ -1,0 +1,9 @@
+
+Thay Đổi tất cả SeatType -> SeatType trong data và bookingcontroller
+
+Scaffold-DbContext "Data Source=MSI;Database=CinemaTicketDB;Integrated Security=True;Trust Server Certificate=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context CinemaTicketDbContext -Force
+
+Scaffold-DbContext "Data Source=MSI;Database=CinemaTicketDB;User ID=sa;Password=123;Trust Server Certificate=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Context CinemaTicketDbContext -Force
+
+
+

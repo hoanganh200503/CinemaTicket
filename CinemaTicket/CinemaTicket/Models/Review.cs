@@ -1,14 +1,21 @@
-﻿namespace CinemaTicketApp.Models
-{
-    public class Review
-    {
-        public int ReviewId { get; set; }
-        public int TicketId { get; set; }
-        public int Rating { get; set; }
-        public string Comment { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+﻿using System;
+using System.Collections.Generic;
 
-        public Ticket Ticket { get; set; }
-    }
+namespace CinemaTicket.Models;
+
+public partial class Review
+{
+    public int ReviewId { get; set; }
+
+    public int TicketId { get; set; }
+
+    public int Rating { get; set; }
+
+    public string? Comment { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public virtual Ticket Ticket { get; set; } = null!;
 }

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CinemaTicket.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using CinemaTicket.Models;
 
 namespace CinemaTicket.Controllers
 {
@@ -33,7 +33,7 @@ namespace CinemaTicket.Controllers
             // Lấy Movie dựa trên MovieId và load các Genres liên quan thông qua MovieGenreMappings
             var movie = await _context.Movies
                 .Include(m => m.MovieGenreMappings)
-                    .ThenInclude(mgm => mgm.Genre)
+                    .ThenInclude(mgm => mgm.MovieGenre)
                 .FirstOrDefaultAsync(m => m.MovieId == id);
 
             return View(movie);
@@ -78,7 +78,20 @@ namespace CinemaTicket.Controllers
                 {
                     movie.Url = "AIsol.jpg"; // Đặt ảnh mặc định
                 }// Nếu không có file mới và Url cũ trống
-
+                var existingMovie = await _context.Movies.FirstOrDefaultAsync(m => m.Title == movie.Title);
+                if (existingMovie != null)
+                {
+                    ModelState.AddModelError("Title", "Movie is exixted!");
+                    ViewBag.Genres = await _context.MovieGenres.ToListAsync();
+                    return View(movie);
+                }
+                if(movie.Duration <= 0)
+                {
+                    ModelState.AddModelError("Duration", "The duration appcept positive only!");
+                    ViewBag.Genres = await _context.MovieGenres.ToListAsync();
+                    return View(movie);
+                }
+                                
                 movie.CreatedAt = DateTime.Now;
                 movie.UpdatedAt = DateTime.Now;
 
@@ -115,8 +128,7 @@ namespace CinemaTicket.Controllers
             }
             var movie = await _context.Movies
                 .Include(mpg => mpg.MovieGenreMappings)
-                .ThenInclude(g => g.Genre)
-                      .FirstAsync(m => m.MovieId == id);
+                      .FirstOrDefaultAsync(m => m.MovieId == id);
 
             if (movie == null)
             {
