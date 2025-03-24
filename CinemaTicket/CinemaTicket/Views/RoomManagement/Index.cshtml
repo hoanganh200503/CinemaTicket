@@ -1,0 +1,59 @@
+﻿@model IEnumerable<CinemaTicket.Data.Room>
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+	<a asp-action="Create" class="btn btn-success mb-1">Create New</a>
+</p>
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.RoomName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Seats)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.CreatedAt)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.UpdatedAt)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.RoomName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Seats.Count)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedAt)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.UpdatedAt)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.RoomId" class="btn btn-warning mb-1">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.RoomId" class="btn btn-primary mb-1">Details</a> |
+
+				<a asp-action="Delete" asp-route-id="@item.RoomId" class="btn btn-danger mb-1">Delete</a> |
+
+					<a asp-controller="RoomManagement" asp-action="GotoSeatManagement" asp-route-roomId="@item.RoomId" class="btn btn-info mb-1">View Seats</a>
+
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

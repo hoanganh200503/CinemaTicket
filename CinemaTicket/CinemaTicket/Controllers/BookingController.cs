@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CinemaTicket.Data;
 using System.Linq;
 using Newtonsoft.Json;
 using CinemaTicket.Services;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using CinemaTicket.Data;
 
 namespace CinemaTicket.Controllers
 {
@@ -73,7 +73,7 @@ namespace CinemaTicket.Controllers
                     s.SeatNumber,
                     s.Status,
                     s.SeatType,
-                    Price = s.SeatTypeNavigation.Price
+                    Price = s.SeatType.Price
                 })
                 .ToList();
 
@@ -193,10 +193,10 @@ namespace CinemaTicket.Controllers
                 // Lấy thông tin ghế ngồi
                 var seats = await _context.Seats
                     .Where(s => seatIds.Contains(s.SeatId))
-                    .Include(s => s.SeatTypeNavigation)
+                    .Include(s => s.SeatType)
                     .ToListAsync();
 
-                decimal totalPrice = seats.Sum(s => s.SeatTypeNavigation.Price);
+                decimal totalPrice = seats.Sum(s => s.SeatType.Price);
 
                 // Cập nhật trạng thái ghế đã thanh toán
                 foreach (var seat in seats)

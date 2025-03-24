@@ -1,0 +1,83 @@
+﻿@model IEnumerable<CinemaTicket.Data.Seat>
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Seat Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a asp-action="AdminPage" asp-controller="Admin">Home</a></li>
+					<li class="breadcrumb-item"><a asp-action="Index" asp-controller="RoomManagement">Room</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Seat List
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+
+<hr />
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h3>Delete Seat</h3>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>
+								@Html.DisplayNameFor(model => model.SeatNumber)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.Status)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.Room)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.SeatType)
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>
+									@Html.DisplayFor(modelItem => item.SeatNumber)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Status)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Room.RoomName)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.SeatType.TypeName)
+								</td>
+								<td>
+									<a asp-action="Edit" asp-route-id="@item.SeatId" asp-route-id="@item.RoomId" class="btn btn-warning mb-1">Edit</a> |
+									<a asp-action="Details" asp-route-id="@item.SeatId" asp-route-id="@item.RoomId" class="btn btn-primary mb-1">Details</a> |
+									<a asp-action="Delete" asp-route-id="@item.SeatId" asp-route-id="@item.RoomId" class="btn btn-danger mb-1">Delete</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

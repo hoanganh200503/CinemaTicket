@@ -1,0 +1,73 @@
+﻿@model CinemaTicket.Data.Room
+
+@{
+	ViewData["Title"] = "Edit";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Room Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a asp-action="AdminPage" asp-controller="Admin">Home</a></li>
+					<li class="breadcrumb-item"><a asp-action="Index" asp-controller="RoomManagement">Room</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Edit Room
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+
+<hr />
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6">
+						<h3>Add Movie</h3>
+						<div class="col-md-4">
+							<form asp-action="Edit">
+								<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+								<input type="hidden" asp-for="RoomId" />
+								<div class="form-group">
+									<label asp-for="RoomName" class="control-label"></label>
+									<input asp-for="RoomName" class="form-control" />
+									<span asp-validation-for="RoomName" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="Cols" class="control-label"></label>
+									<input asp-for="Cols" class="form-control" />
+									<span asp-validation-for="Cols" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="Rows" class="control-label"></label>
+									<input asp-for="Rows" class="form-control" />
+									<span asp-validation-for="Rows" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<input type="submit" value="Save" class="btn btn-primary" />
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div>
+						<a asp-action="Index">Back to List</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

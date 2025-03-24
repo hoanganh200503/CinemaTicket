@@ -4,6 +4,7 @@
 }
 
 
+
 <!--begin::App Content Header-->
 <div class="app-content-header">
 	<!--begin::Container-->
@@ -15,7 +16,8 @@
 			</div>
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-end">
-					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item"><a asp-action="AdminPage" asp-controller="Admin">Home</a></li>
+					<li class="breadcrumb-item"><a asp-action="Index" asp-controller="MovieManagement">Movies List</a></li>
 					<li class="breadcrumb-item active" aria-current="page">
 						Add Movie
 					</li>
@@ -26,17 +28,15 @@
 </div>
 
 
+
 <hr />
 <div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
-			<div class="panel-heading">
-				Add movie
-			</div>
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-6">
-						<h3>Movie</h3>
+						<h3>Add Movie</h3>
 						<form asp-action="Create" role="form" enctype="multipart/form-data">
 							<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 							<div class="form-group">
@@ -73,7 +73,7 @@
 							</div>
 							<div class="form-group">
 								<label asp-for="Description" class="control-label"></label>
-								<input asp-for="Description" class="form-control" height="" />
+								<input asp-for="Description" class="form-control" style="height:150px" />
 								<span asp-validation-for="Description" class="text-danger"></span>
 							</div>
 							<div class="form-group">

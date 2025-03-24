@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CinemaTicket.Data;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
+using CinemaTicket.Data;
 
 namespace CinemaTicket.Controllers     //Đổi lại namespace (cũ  CinemaTicketApp.Controllers)
 {
@@ -67,7 +68,7 @@ namespace CinemaTicket.Controllers     //Đổi lại namespace (cũ  CinemaTick
             return View(customer);
         }
 
-        [HttpGet]
+        [HttpGet("Account/Edit/{changePassword?}")]
         public IActionResult Edit(bool changePassword = false)
         {
             var userEmail = HttpContext.Session.GetString("UserEmail");
@@ -82,12 +83,33 @@ namespace CinemaTicket.Controllers     //Đổi lại namespace (cũ  CinemaTick
                 return NotFound();
             }
 
+            // Giữ trạng thái đổi mật khẩu nếu có lỗi
+            if (TempData.ContainsKey("OpenPasswordChange"))
+            {
+                changePassword = (bool)TempData["OpenPasswordChange"];
+            }
+
             ViewData["OpenPasswordChange"] = changePassword;
             return View(customer);
         }
 
+        private string GetMd5Hash(string input)
+        {
+            using (var md5 = MD5.Create())
+            {
+                var inputBytes = Encoding.ASCII.GetBytes(input);
+                var hashBytes = md5.ComputeHash(inputBytes);
+                var sb = new StringBuilder();
+                foreach (var t in hashBytes)
+                {
+                    sb.Append(t.ToString("x2"));
+                }
+                return sb.ToString();
+            }
+        }
+
         [HttpPost]
-        public IActionResult Edit(string name, string email, string currentPassword, string newPassword)
+        public IActionResult Edit(string name, string email, string currentPassword, string newPassword, string changePassword)
         {
             var userEmail = HttpContext.Session.GetString("UserEmail");
             if (userEmail == null)
@@ -101,19 +123,54 @@ namespace CinemaTicket.Controllers     //Đổi lại namespace (cũ  CinemaTick
                 return NotFound();
             }
 
+            // Kiểm tra email hợp lệ bằng Regex
+            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s\.]+$";
+            if (!Regex.IsMatch(email, emailPattern))
+            {
+                ModelState.AddModelError("email", "Email không hợp lệ! Định dạng đúng: example@domain.com");
+                return View(customer);
+            }
+
             // Cập nhật thông tin cơ bản
             customer.Name = name;
             customer.Email = email;
 
-            // Cập nhật mật khẩu nếu có
-            if (!string.IsNullOrEmpty(currentPassword) && !string.IsNullOrEmpty(newPassword))
+            // Kiểm tra nếu người dùng thực sự muốn đổi mật khẩu
+            if (changePassword == "yes")
             {
-                if (customer.Password != currentPassword)
+                ViewData["OpenPasswordChange"] = true; // Giữ trạng thái hiển thị mật khẩu khi có lỗi
+
+                if (string.IsNullOrEmpty(currentPassword) || string.IsNullOrEmpty(newPassword))
                 {
-                    ModelState.AddModelError("", "Mật khẩu hiện tại không đúng");
+                    ModelState.AddModelError("", "Vui lòng nhập cả mật khẩu hiện tại và mật khẩu mới");
                     return View(customer);
                 }
-                customer.Password = newPassword;
+
+                // Kiểm tra độ mạnh của mật khẩu
+                string passwordPattern = @"^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$";
+                if (!Regex.IsMatch(newPassword, passwordPattern))
+                {
+                    ModelState.AddModelError("newPassword", "Mật khẩu phải có ít nhất 8 ký tự, 1 chữ hoa, 1 số và 1 ký tự đặc biệt.");
+                    return View(customer);
+                }
+
+                var currentHashedPassword = GetMd5Hash(currentPassword);
+
+                if (customer.Password != currentHashedPassword)
+                {
+                    ModelState.AddModelError("currentPassword", "Mật khẩu hiện tại không đúng");
+                    return View(customer);
+                }
+
+                var newHashedPassword = GetMd5Hash(newPassword);
+
+                if (newHashedPassword == customer.Password)
+                {
+                    ModelState.AddModelError("newPassword", "Mật khẩu mới không được trùng với mật khẩu cũ.");
+                    return View(customer);
+                }
+
+                customer.Password = GetMd5Hash(newPassword);
             }
 
             customer.UpdatedAt = DateTime.Now;
@@ -123,8 +180,12 @@ namespace CinemaTicket.Controllers     //Đổi lại namespace (cũ  CinemaTick
             HttpContext.Session.SetString("CustomerName", customer.Name);
             HttpContext.Session.SetString("CustomerEmail", customer.Email);
 
-            return RedirectToAction("Profile");
+            // Gửi thông báo thành công
+            TempData["SuccessMessage"] = "Đã cập nhật thông tin thành công!";
+
+            return RedirectToAction("Edit", new { changePassword = false });
         }
+
 
         public IActionResult Logout()
         {

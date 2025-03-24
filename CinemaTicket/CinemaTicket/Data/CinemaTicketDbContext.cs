@@ -97,7 +97,7 @@ public partial class CinemaTicketDbContext : DbContext
             entity.Property(e => e.GenreName).HasMaxLength(100);
 
             entity.HasMany(d => d.MovieGenreMappings)
-                .WithOne(p => p.Genre)
+                .WithOne(p => p.MovieGenre)
                 .HasForeignKey(d => d.GenreId)
                 .HasConstraintName("FK__MovieGenr__Genre__5EBF139D");
         });
@@ -124,87 +124,60 @@ public partial class CinemaTicketDbContext : DbContext
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            // Bỏ vì không liên kết khóa ngoại trong db được
+            //entity.HasOne(d => d.Ticket).WithMany(p => p.Reviews) 
+            //    .HasForeignKey(d => d.TicketId)
+            //    .HasConstraintName("FK__Reviews__TicketI__60A75C0F");
 
-            entity.HasOne(d => d.Ticket).WithMany(p => p.Reviews)
-                .HasForeignKey(d => d.TicketId)
-                .HasConstraintName("FK__Reviews__TicketI__60A75C0F");
+            entity.HasOne(d => d.Movie).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.MovieId)
+                .HasConstraintName("FK__Reviews__MovieID__619B8048");
+            entity.HasOne(d => d.Customer).WithMany(p => p.Reviews)
+                .HasForeignKey(d => d.CustomerId)
+                .HasConstraintName("FK__Reviews__Custome__628FA481");
         });
-
-
-        modelBuilder.Entity<Review>(entity =>
-        {
-            entity.HasKey(e => e.ReviewId).HasName("PK__Reviews__74BC79AE88DDF9E8");
-
-            entity.Property(e => e.ReviewId).HasColumnName("ReviewID");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.TicketId).HasColumnName("TicketID");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-
-            entity.HasOne(d => d.Ticket).WithMany(p => p.Reviews)
-                .HasForeignKey(d => d.TicketId)
-                .HasConstraintName("FK__Reviews__TicketI__60A75C0F");
-        });
-
+                     
         modelBuilder.Entity<Room>(entity =>
         {
-            entity.HasKey(e => e.RoomId).HasName("PK__Rooms__3286391966BAF864");
-
+            entity.HasKey(e => e.RoomId);
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
             entity.Property(e => e.RoomName).HasMaxLength(100);
-            entity.Property(e => e.RoomType)
-                .HasMaxLength(50)
-                .HasColumnName("room_type");
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
+
+            entity.HasMany(d => d.Seats)
+           .WithOne(p => p.Room)
+           .HasForeignKey(d => d.RoomId)
+           .HasConstraintName("FK_Seats_Room");
+
         });
 
         modelBuilder.Entity<Seat>(entity =>
         {
-            entity.HasKey(e => e.SeatId).HasName("PK__Seats__311713D342AFFF4E");
-
-            entity.HasIndex(e => new { e.RoomId, e.SeatNumber }, "UQ__Seats__2C64E5A8F1A74C19").IsUnique();
+            entity.HasKey(e => e.SeatId);
+            entity.HasIndex(e => new { e.SeatNumber }).IsUnique();//entity.HasIndex(e => new { e.RoomId, e.SeatNumber }).IsUnique();
 
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.SeatNumber).HasMaxLength(10);
-            entity.Property(e => e.SeatType).HasMaxLength(50);
             entity.Property(e => e.SeatTypeId).HasColumnName("seat_type_id");
+            entity.Property(e => e.SeatNumber).HasMaxLength(10);
             entity.Property(e => e.Status).HasMaxLength(50);
-            entity.Property(e => e.UpdatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETDATE()");
+            entity.Property(e => e.UpdatedAt).HasDefaultValueSql("GETDATE()");
 
-            entity.HasOne(d => d.Room).WithMany(p => p.Seats)
-                .HasForeignKey(d => d.RoomId)
-                .HasConstraintName("FK__Seats__RoomID__619B8048");
 
-            entity.HasOne(d => d.SeatTypeNavigation).WithMany(p => p.Seats)
-                .HasForeignKey(d => d.SeatTypeId)
-                .HasConstraintName("FK_Seats_SeatTypes");
         });
-
         modelBuilder.Entity<SeatType>(entity =>
         {
-            entity.HasKey(e => e.SeatTypeId).HasName("PK__SeatType__5C2EB197E3489CAF");
-
+            entity.HasKey(e => e.SeatTypeId);
             entity.Property(e => e.SeatTypeId).HasColumnName("seat_type_id");
-            entity.Property(e => e.Price)
-                .HasColumnType("decimal(10, 2)")
-                .HasColumnName("price");
-            entity.Property(e => e.TypeName)
-                .HasMaxLength(50)
-                .HasColumnName("type_name");
+            entity.Property(e => e.TypeName).HasMaxLength(50).HasColumnName("type_name");
+            entity.Property(e => e.Price).HasColumnType("decimal(10, 2)").HasColumnName("price");
+
+            entity.HasMany(d => d.Seats)
+                .WithOne(p => p.SeatType)
+                .HasForeignKey(d => d.SeatTypeId)
+                .HasConstraintName("FK_Seats_SeatType");
         });
 
         modelBuilder.Entity<Showtime>(entity =>

@@ -43,44 +43,10 @@
 				</li>
 
 				<li class="nav-item">
-					<a href="#" class="nav-link">
+					<a asp-action="Index" asp-controller="RoomManagement" class="nav-link">
 						<i class="nav-icon bi bi-circle-fill"></i>
-						<p>
-							Rooms
-							<i class="nav-arrow bi bi-chevron-right"></i>
-						</p>
+						<p>Rooms</p>
 					</a>
-					<ul class="nav nav-treeview">
-						<li class="nav-item">
-							<a href="#" class="nav-link">
-								<i class="nav-icon bi bi-circle"></i>
-								<p>
-									Room Afa
-									<i class="nav-arrow bi bi-chevron-right"></i>
-								</p>
-							</a>
-							<ul class="nav nav-treeview">
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="nav-icon bi bi-record-circle-fill"></i>
-										<p>Nomal Seat</p>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="nav-icon bi bi-record-circle-fill"></i>
-										<p>Vip Seat</p>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="#" class="nav-link">
-										<i class="nav-icon bi bi-record-circle-fill"></i>
-										<p>Couple Seat</p>
-									</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
 				</li>
 				<li class="nav-item">
 					<a asp-action="Index" asp-controller="CustomerManagement" class="nav-link">
@@ -91,8 +57,32 @@
 				<li class="nav-item">
 					<a href="#" class="nav-link">
 						<i class="nav-icon bi bi-circle-fill"></i>
-						<p>Review</p>
+						<p>
+							Reviews
+							<i class="nav-arrow bi bi-chevron-right"></i>
+						</p>
 					</a>
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a asp-action="Index" asp-controller="ReviewManagement" class="nav-link">
+								<i class="nav-icon bi bi-circle"></i>
+								<p>Waiting</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a asp-action="ApprovedList" asp-controller="ReviewManagement" class="nav-link">
+								<i class="nav-icon bi bi-circle"></i>
+								<p>Approved</p>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a asp-action="DeniedList" asp-controller="ReviewManagement" class="nav-link">
+								<i class="nav-icon bi bi-circle"></i>
+								<p>Denied</p>
+							</a>
+						</li>
+						
+					</ul>
 				</li>
 				<li class="nav-header">View Parameter</li>
 				<li class="nav-item">
