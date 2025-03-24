@@ -1,0 +1,19 @@
+
+
+
+Thay đổi cấu trúc và cột bảng review (cụ thể trong database script)
+
+Thay đổi model của Review, Cútomer, Movie và model builder theo các mối quan hệ với review 
+
+Thêm các chức năng Review
+ -Xem review đang đợi duyệt 
+	+duyệt review
+	+từ chối review
+ -Xem review đang Đã duyệt
+ -Xem review đang Đã Từ chối
+
+Thêm nuget Install-Package X.PagedList.Mvc.Core  để phân trang  trong movie,... (các controller có phân trang)
+Thêm phân trang cho movie
+Thêm Filter cho Movies 
+	-Theo tên
+	-Theo genre

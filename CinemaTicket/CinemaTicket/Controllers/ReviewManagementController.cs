@@ -21,9 +21,6 @@ namespace CinemaTicket.Controllers
         // GET: ReviewManagement
         public async Task<IActionResult> Index()
         {
-            // giá trị mặc định cho dropdownlist IsApproved
-            //ViewData["IsApprovedList"] = new SelectList(new List<string> { "Approved", "Denied", "Waiting" });
-
             // danh sách review chưa được duyệt
             var cinemaTicketDbContext = _context.Reviews.Include(r => r.Customer).Include(r => r.Movie).Where(i => i.IsApproved == "Waiting").OrderByDescending(i => i.CreatedAt);
             return View(await cinemaTicketDbContext.ToListAsync());
@@ -36,7 +33,7 @@ namespace CinemaTicket.Controllers
             review.UpdatedAt = DateTime.Now;
             _context.Reviews.Update(review);
             _context.SaveChanges();
-            return RedirectToAction("ApprovedList");
+            return RedirectToAction("Index");
         }
         // Từ chối Review
         public IActionResult Deny(int id)
@@ -46,7 +43,7 @@ namespace CinemaTicket.Controllers
             review.UpdatedAt = DateTime.Now;
             _context.Reviews.Update(review);
             _context.SaveChanges();
-            return RedirectToAction("DeniedList"); 
+            return RedirectToAction("Index"); 
         }
         // List Review đã được duyệt
         public async Task<IActionResult> ApprovedList()

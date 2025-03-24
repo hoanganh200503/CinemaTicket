@@ -1,6 +1,0 @@
-
-Thay Đổi tất cả SeatType -> SeatType trong data và bookingcontroller
-
-Thay đổi cấu trúc và cột bảng review (cụ thể trong database script)
-
-Thêm nuget Install-Package X.PagedList.Mvc.Core  để phân trang  trong movie,... (các controller có phân trang)
