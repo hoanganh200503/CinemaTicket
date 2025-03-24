@@ -210,7 +210,7 @@ namespace CinemaTicket.Controllers
             <p><b>Khách hàng:</b> {customer.Name}</p>
             <p><b>Phim:</b> {showtime.Movie.Title}</p>
             <p><b>Phòng chiếu:</b> {showtime.Room.RoomName}</p>
-            <p><b>Thời gian:</b> {showtime.Showtime1.ToString("dd/MM/yyyy HH:mm")}</p>
+            <p><b>Thời gian:</b> {showtime.ShowTime.ToString("dd/MM/yyyy HH:mm")}</p>
             <p><b>Ghế:</b> {string.Join(", ", seats.Select(s => s.SeatNumber))}</p>
             <p><b>Tổng tiền:</b> {totalPrice} VND</p>
             <p>Cảm ơn bạn đã đặt vé tại rạp chiếu phim của chúng tôi!</p>";

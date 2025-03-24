@@ -1,0 +1,44 @@
+﻿@model IEnumerable<CinemaTicket.Data.Showtime>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Danh sách suất chiếu</h2>
+    <a class="btn btn-success" href="@Url.Action("Create")">Thêm suất chiếu</a>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Phim</th>
+            <th>Phòng</th>
+            <th>Ngày giờ chiếu</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var showtime in Model)
+        {
+            <tr>
+                <td>@showtime.Movie.Title</td>
+                <td>@showtime.Room.RoomName</td>
+                <td>@showtime.ShowTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="@Url.Action("Edit", new { id = showtime.ShowtimeId })">Sửa</a>
+                    <a class="btn btn-danger btn-sm" href="@Url.Action("Delete", new { id = showtime.ShowtimeId })">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div class="d-flex justify-content-center mt-3">
+    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+    {
+        <a href="?page=@i" class="btn btn-sm @(ViewBag.CurrentPage == i ? "btn-primary" : "btn-outline-secondary") mx-1">@i</a>
+    }
+</div>

@@ -39,7 +39,7 @@ public partial class CinemaTicketDbContext : DbContext
     public virtual DbSet<TransactionTicket> TransactionTickets { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-               => optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=CinemaTicketDB;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+               => optionsBuilder.UseSqlServer("Data Source=wee;Initial Catalog=CinemaTicketDB;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,7 +97,7 @@ public partial class CinemaTicketDbContext : DbContext
             entity.Property(e => e.GenreName).HasMaxLength(100);
 
             entity.HasMany(d => d.MovieGenreMappings)
-                .WithOne(p => p.Genre)
+                .WithOne(p => p.MovieGenre)
                 .HasForeignKey(d => d.GenreId)
                 .HasConstraintName("FK__MovieGenr__Genre__5EBF139D");
         });
@@ -217,7 +217,7 @@ public partial class CinemaTicketDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.MovieId).HasColumnName("MovieID");
             entity.Property(e => e.RoomId).HasColumnName("RoomID");
-            entity.Property(e => e.Showtime1)
+            entity.Property(e => e.ShowTime)
                 .HasColumnType("datetime")
                 .HasColumnName("Showtime");
             entity.Property(e => e.UpdatedAt)
@@ -305,6 +305,6 @@ public partial class CinemaTicketDbContext : DbContext
 
         OnModelCreatingPartial(modelBuilder);
     }
-
+    
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

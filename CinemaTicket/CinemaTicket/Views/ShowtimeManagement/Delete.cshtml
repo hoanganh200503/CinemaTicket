@@ -1,0 +1,21 @@
+﻿@model CinemaTicket.Data.Showtime
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<p class="fw-bold text-danger">Bạn có chắc chắn muốn xóa suất chiếu này?</p>
+
+<div class="mb-3">
+    <p><strong>Phim:</strong> @Model.Movie.Title</p>
+    <p><strong>Phòng Chiếu:</strong> @Model.Room.RoomName</p>
+    <p><strong>Thời Gian:</strong> @Model.ShowTime.ToString("dd/MM/yyyy HH:mm")</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ShowtimeId" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>
