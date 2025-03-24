@@ -9,11 +9,12 @@ public partial class Room
 
     public string RoomName { get; set; } = null!;
 
+    public int Cols { get; set; }
+    public int Rows { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
-
-    public string? RoomType { get; set; }
 
     public virtual ICollection<Seat> Seats { get; set; } = new List<Seat>();
 

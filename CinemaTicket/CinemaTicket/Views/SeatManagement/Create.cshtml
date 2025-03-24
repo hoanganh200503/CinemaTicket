@@ -1,0 +1,82 @@
+﻿@model CinemaTicket.ViewModels.SeatViewModel
+@{
+	ViewData["Title"] = "Create";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Seat Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a asp-action="AdminPage" asp-controller="Admin">Home</a></li>
+					<li class="breadcrumb-item"><a asp-action="Index" asp-controller="RoomManagement">Room</a></li>
+					<li class="breadcrumb-item"><a asp-action="Index" asp-controller="SeatManagement">Seat</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Add seat
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+
+<hr />
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h3>Add Seat</h3>
+				<form asp-action="Create">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<div class="form-group">
+						<label asp-for="RoomId" class="control-label">Room</label>
+						<select asp-for="RoomId" class="form-control" asp-items="Model.AvailableRooms">
+							<option value="">-- Choose Room --</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label asp-for="SeatNumber" class="control-label"></label>
+						<input asp-for="SeatNumber" class="form-control" />
+						<span asp-validation-for="SeatNumber" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="Status" class="control-label"></label>
+						<select asp-for="Status" class="form-control">
+							<option value="Available">Available</option>
+							<option value="Maintenance">Maintenance</option>
+							<option value="Reserved">Reserved</option>
+						</select>
+						<span asp-validation-for="Status" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="SeatTypeId" class="control-label"> Seat Type</label>
+						<select asp-for="SeatTypeId" class="form-control" asp-items="Model.SeatTypes">
+							<option value="">-- Choose Seat Type --</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<input type="submit" value="Create" class="btn btn-primary" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}

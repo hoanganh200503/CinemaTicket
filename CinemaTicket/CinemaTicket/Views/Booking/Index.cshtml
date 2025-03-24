@@ -49,38 +49,42 @@
                         {
                             <p>
                                 <i class="bi bi-tags text-info"></i> <strong>Thể loại:</strong>
-                                @Html.Raw(string.Join(" ", movie.MovieGenreMappings.Select(g => $"<span class='badge bg-secondary'>{g.GenreName}</span>")))
+                                @* @string.Join(", ", movie.MovieGenreMappings.Select(g => g.MovieGenre.GenreName)) *@
+                                @string.Join(", ", movie.MovieGenreMappings?
+                                         .Where(g => g.MovieGenre != null)
+                                         .Select(g => g.MovieGenre.GenreName) ?? new List<string>())
+
                             </p>
                         }
 
                     </div>
                 </div>
 
-                </div>
+            </div>
         </div>
         <div class="col-md-9">
             <h2 class="text-center text-primary fw-bold my-4">🎬 Đặt Vé Xem Phim</h2>
-    <!-- Chọn suất chiếu -->
-    <div class="mb-3">
-        <label for="showtimeSelect" class="form-label fw-bold">🕒 Chọn suất chiếu:</label>
-        <select id="showtimeSelect" class="form-select shadow-sm">
-            <option value="">🎬 Chọn suất chiếu</option>
-            @foreach (var showtime in Model)
-            {
-                <option value="@showtime.ShowtimeId">@showtime.Showtime1</option>
-            }
-        </select>
-    </div>
+            <!-- Chọn suất chiếu -->
+            <div class="mb-3">
+                <label for="showtimeSelect" class="form-label fw-bold">🕒 Chọn suất chiếu:</label>
+                <select id="showtimeSelect" class="form-select shadow-sm">
+                    <option value="">🎬 Chọn suất chiếu</option>
+                    @foreach (var showtime in Model)
+                    {
+                        <option value="@showtime.ShowtimeId">@showtime.Showtime1</option>
+                    }
+                </select>
+            </div>
 
-    <!-- Chọn phòng -->
-    <div class="mb-3">
-        <label for="roomSelect" class="form-label fw-bold">🏠 Chọn phòng:</label>
-        <select id="roomSelect" class="form-select shadow-sm" disabled>
-            <option value="">🏠 Chọn phòng</option>
-        </select>
-    </div>
+            <!-- Chọn phòng -->
+            <div class="mb-3">
+                <label for="roomSelect" class="form-label fw-bold">🏠 Chọn phòng:</label>
+                <select id="roomSelect" class="form-select shadow-sm" disabled>
+                    <option value="">🏠 Chọn phòng</option>
+                </select>
+            </div>
 
-    <!-- Màn hình -->
+            <!-- Màn hình -->
             <div class="d-flex align-items-center justify-content-center my-4 p-3 shadow-lg bg-white rounded-3">
                 <div class="screen-container">
                     <div class="screen-box shadow p-3 rounded-3 bg-dark text-white text-center">
@@ -89,22 +93,22 @@
                 </div>
             </div>
 
-    <hr />
-    <!-- Chọn ghế -->
-    <div class="mb-3 text-center">
-        <label class="form-label fw-bold">💺 Chọn ghế:</label>
-        <div id="seatContainer" class="d-flex flex-wrap justify-content-center gap-2"></div>
-    </div>
+            <hr />
+            <!-- Chọn ghế -->
+            <div class="mb-3 text-center">
+                <label class="form-label fw-bold">💺 Chọn ghế:</label>
+                <div id="seatContainer" class="d-flex flex-wrap justify-content-center gap-2"></div>
+            </div>
             <div class="text-center mt-3">
                 <h5>Tổng tiền: <span id="totalAmount" class="fw-bold text-danger">0 đ</span></h5>
             </div>
 
-    <!-- Nút đặt vé -->
-    <div class="text-center">
-        <button id="confirmBooking" class="btn btn-success fw-bold px-4 py-2" disabled>Đặt Vé</button>
+            <!-- Nút đặt vé -->
+            <div class="text-center">
+                <button id="confirmBooking" class="btn btn-success fw-bold px-4 py-2" disabled>Đặt Vé</button>
+            </div>
+        </div>
     </div>
-</div>
-</div>
 </div>
 <style>
     .movie-poster {
@@ -114,9 +118,9 @@
         transition: transform 0.3s ease-in-out;
     }
 
-    .movie-poster:hover {
-        transform: scale(1.05);
-    }
+        .movie-poster:hover {
+            transform: scale(1.05);
+        }
 
     .movie-info {
         max-width: 350px;
@@ -138,11 +142,13 @@
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
+
     .movie-img-note {
         width: 100%;
         object-fit: cover;
         vertical-align: unset;
     }
+
     .screen {
         background: #444;
         color: white;
@@ -275,6 +281,7 @@
         display: flex;
         flex-direction: column;
     }
+
     .seat-row {
         display: flex;
         justify-content: center;
@@ -329,10 +336,10 @@
                      var movieUrl = "https://e1.pngegg.com/pngimages/314/988/png-clipart-symbolize-x.png";
     var movieTitle = "@(movie?.Title ?? "Unknown")";
         $.get('/Booking/GetSeats', { roomId: roomId }, function (data) {
-            let groupedSeats = {}; 
+            let groupedSeats = {};
 
             data.forEach(seat => {
-                let row = seat.seatNumber.charAt(0); 
+                let row = seat.seatNumber.charAt(0);
 
                 if (!groupedSeats[row]) {
                     groupedSeats[row] = [];

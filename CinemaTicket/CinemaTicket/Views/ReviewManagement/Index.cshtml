@@ -1,0 +1,87 @@
+﻿@model IEnumerable<CinemaTicket.Data.Review>
+
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Reviews Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a asp-action="AdminPage" asp-controller="Admin">Home</a></li>
+					<li class="breadcrumb-item"><a asp-action="Index" asp-controller="ReviewManagement">Waiting Review</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						Waiting reviews
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+
+
+
+<hr />
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h3>Waiting Reviews</h3>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>
+								@Html.DisplayNameFor(model => model.Movie.Title)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.Customer.Name)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.Rating)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.Comment)
+							</th>
+							<th>
+								@Html.DisplayNameFor(model => model.IsApproved)
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<td>
+									@Html.DisplayFor(modelItem => item.Movie.Title)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Customer.Name)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Rating)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.Comment)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.IsApproved)
+								</td>
+								<td>
+									<a asp-action="Approve" asp-controller="ReviewManagement" asp-route-id="@item.ReviewId" class="btn btn-primary mb-1">Approve</a> |
+									<a asp-action="Deny" asp-controller="ReviewManagement" asp-route-id="@item.ReviewId" class="btn btn-danger mb-1">Deny</a>
+									</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

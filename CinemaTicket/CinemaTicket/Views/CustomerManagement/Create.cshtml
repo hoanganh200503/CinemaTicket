@@ -40,9 +40,14 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group position-relative">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control" id="passwordInput" />
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword" style="padding: 0 12px;">
+                        <span id="eyeIcon" style="font-size: 16px; position: relative; display: inline-block;">👁️</span>
+                    </button>
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -66,4 +71,41 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <style>
+        #eyeIcon {
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        #eyeIcon.hidden::after {
+            content: '/';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px;
+            color: #000;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+        #togglePassword {
+            padding: 0 12px;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $('#togglePassword').click(function() {
+                var passwordInput = $('#passwordInput');
+                var icon = $('#eyeIcon');
+                
+                if (passwordInput.attr('type') === 'password') {
+                    passwordInput.attr('type', 'text');
+                    icon.removeClass('hidden');
+                } else {
+                    passwordInput.attr('type', 'password');
+                    icon.addClass('hidden');
+                }
+            });
+        });
+    </script>
 }

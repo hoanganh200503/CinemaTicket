@@ -18,6 +18,7 @@ public partial class Customer
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

@@ -1,5 +1,7 @@
-﻿@{
-	Layout= "~/Views/Shared/_LayoutAdmin.cshtml";
+﻿@model CinemaTicket.ViewModels.DashboardViewModel
+
+@{
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 
@@ -35,27 +37,28 @@
 					<span class="info-box-icon text-bg-primary shadow-sm"> <i class="bi bi-chat-fill"></i> </span>
 					<div class="info-box-content">
 						<span class="info-box-text">Total Review</span> <span class="info-box-number">
-							333
+							@Model.TotalReviews
 						</span>
 					</div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col -->
+
 			<div class="col-12 col-sm-6 col-md-3">
 				<div class="info-box">
 					<span class="info-box-icon text-bg-danger shadow-sm"> <i class="bi bi-hand-thumbs-up-fill"></i> </span>
-					<div class="info-box-content"> <span class="info-box-text"> Rating Average</span> <span class="info-box-number">3,8</span> </div> <!-- /.info-box-content -->
+					<div class="info-box-content"> <span class="info-box-text"> Rating Average</span> <span class="info-box-number">@Model.RatingAverage.ToString("0.00")</span> </div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col --> <!-- fix for small devices only --> <!-- <div class="clearfix hidden-md-up"></div> -->
 			<div class="col-12 col-sm-6 col-md-3">
 				<div class="info-box">
 					<span class="info-box-icon text-bg-success shadow-sm"> <i class="bi bi-cart-fill"></i> </span>
-					<div class="info-box-content"> <span class="info-box-text">Ticket Purchased</span> <span class="info-box-number">760</span> </div> <!-- /.info-box-content -->
+					<div class="info-box-content"> <span class="info-box-text">Ticket Purchased</span> <span class="info-box-number">@Model.TicketPurchased</span> </div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col -->
 			<div class="col-12 col-sm-6 col-md-3">
 				<div class="info-box">
 					<span class="info-box-icon text-bg-warning shadow-sm"> <i class="bi bi-people-fill"></i> </span>
-					<div class="info-box-content"> <span class="info-box-text">New Members</span> <span class="info-box-number">2,000</span> </div> <!-- /.info-box-content -->
+					<div class="info-box-content"> <span class="info-box-text">Total Members</span> <span class="info-box-number">@Model.TotalMembers</span> </div> <!-- /.info-box-content -->
 				</div> <!-- /.info-box -->
 			</div> <!-- /.col -->
 		</div>
@@ -75,44 +78,32 @@
 					<div class="card-body p-0">
 						<div class="px-2">
 							@*For loop here*@
-							<div class="d-flex border-top py-2 px-1">
-								<!--Get movie poster here-->
-								<div class="col-2">
-									<img src="~/images/BacKimThang2.jpg"
-										 alt="Movie Image" class="img-size-50">
-								</div>
-								<div class="col-10">
-									<a href="javascript:void(0)" class="fw-bold">
-										<!--Name Movie Here-->Bac Kim Thang
-										<span class="badge text-bg-warning float-end">
-											<!--Rating here-->5.1
-										</span>
-									</a>
-									<div class="text-truncate">
-										<!--Description here-->Bộ phim kinh dị Việt Nam kể về những ám ảnh kinh hoàng trong giấc mơ.2
+							@foreach (var movie in Model.hotMovies)
+							{
+								<div class="d-flex border-top py-2 px-1">
+									<!--Get movie poster here-->
+									<div class="col-2">
+										<img src="~/images/@movie.Url"
+											 alt="Poster" onerror="this.src='/images/movie-placeholder.jpg'" class="img-size-64">
 									</div>
-								</div>
-							</div> <!-- /.item -->
+									<div class="col-10">
+										<a href="javascript:void(0)" class="fw-bold">
+											<!--Name Movie Here-->@movie.Title
+											<span class="badge text-bg-warning float-end">
+												<!--Rating here-->Rating @movie.MovieRatingAverage.ToString("0.00")
+											</span>
+										</a>
+										<div class="text-truncate">
+											<!--Description here-->@movie.Description
+										</div>
+									</div>
+								</div> <!-- /.item -->
+							}
 							@*End for loop Here*@
-							<!--Example other movie-->
-							<div class="d-flex border-top py-2 px-1">
-								<div class="col-2"> <img src="~/images/BoGia.jpg" alt="Movie Image" class="img-size-50"> </div>
-								<div class="col-10">
-									<a href="javascript:void(0)" class="fw-bold">
-										Bo Gia
-										<span class="badge text-bg-success float-end">
-											3.3
-										</span>
-									</a>
-									<div class="text-truncate">
-										Phim hài cảm động về tình cảm gia đình giữa một ông bố già và con trai.
-									</div>
-								</div>
-							</div> <!-- /.item -->
 						</div>
 					</div> <!-- /.card-body -->
 					<div class="card-footer text-center">
-						<a asp-action="Index" asp-controller="Movie" asp-area="Admin" class="uppercase">
+						<a asp-action="Index" asp-controller="Movie" class="uppercase">
 							View All Movies
 						</a>
 					</div> <!-- /.card-footer -->
@@ -126,7 +117,7 @@
 				<div class="card mb-4">
 					<div class="card-header">
 						<h3 class="card-title">Genre Watching</h3>
-						<div class="card-tools">
+						<div id="chart" class="card-tools">
 							<button type="button" class="btn btn-tool" data-lte-toggle="card-collapse">
 								<i data-lte-icon="expand" class="bi bi-plus-lg"></i>
 								<i data-lte-icon="collapse" class="bi bi-dash-lg"></i>
@@ -157,37 +148,44 @@
 </div> <!--end::Container-->
 @section Scripts {
 	<script>
-	//-------------
-		// - PIE CHART -
 		//-------------
+			// - PIE CHART -
+			//-------------
+			 const genreLabels = @Html.Raw(Json.Serialize(Model.GenreLabels));
+		const genreCounts = @Html.Raw(Json.Serialize(Model.GenreCounts));
 
-		const pie_chart_options = {
-			series: [700, 500, 400, 600, 300, 100],
-			chart: {
-				type: "donut",
-			},
-							labels: ["Horror", "Comedy", "Action", "Safari", "romance", "Other"],
-			dataLabels: {
-				enabled: false,
-			},
-			colors: [
-				"#0d6efd",
-				"#20c997",
-				"#ffc107",
-				"#d63384",
-				"#6f42c1",
-				"#adb5bd",
-			],
-		};
+			const pie_chart_options = {
+				 series: genreCounts, // Số lượng phim từng thể loại
+				// series: [1, 2, 3, 4, 5, 6,7,8],
+				chart: {
+							type: "donut",
+				},
+				 labels: genreLabels, // Tên thể loại
+								// labels: ["Horror", "Comedy", "Action", "Family", "Fantasy", "Adventure" ,"Psychological" ,"Emotional"],
+				dataLabels: {
+					enabled: false,
+				},
+				colors: [
+						   "#0d6efd",  // Xanh dương
+		"#20c997",  // Xanh lá
+		"#ffc107",  // Vàng
+		"#d63384",  // Hồng
+		"#6f42c1",  // Tím
+		"#adb5bd",  // Xám nhạt
+		"#fd7e14",  // Cam
+		"#198754",  // Xanh đậm
+		"#6610f2"   // Tím đậm
+				],
+			};
 
-		const pie_chart = new ApexCharts(
-			document.querySelector("#pie-chart"),
-			pie_chart_options,
-		);
-		pie_chart.render();
+			const pie_chart = new ApexCharts(
+				document.querySelector("#pie-chart"),
+				pie_chart_options,
+			);
+			pie_chart.render();
 
-		//-----------------
-		// - END PIE CHART -
-		//-----------------
-		</script>
+			//-----------------
+			// - END PIE CHART -
+			//-----------------
+	</script>
 }

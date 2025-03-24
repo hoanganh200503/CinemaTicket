@@ -11,8 +11,6 @@ public partial class Seat
 
     public string SeatNumber { get; set; } = null!;
 
-    public string SeatType { get; set; } = null!;
-
     public string Status { get; set; } = null!;
 
     public DateTime? CreatedAt { get; set; }
@@ -21,9 +19,9 @@ public partial class Seat
 
     public int? SeatTypeId { get; set; }
 
-    public virtual Room Room { get; set; } = null!;
+    public virtual Room Room { get; set; }
 
-    public virtual SeatType? SeatTypeNavigation { get; set; }
+    public virtual SeatType SeatType { get; set; }
 
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

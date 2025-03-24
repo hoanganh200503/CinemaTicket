@@ -1,5 +1,6 @@
-﻿@model IEnumerable<CinemaTicket.Data.Movie>
-
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<CinemaTicket.Data.Movie>
 @{
 	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -16,34 +17,51 @@
 			</div>
 			<div class="col-sm-6">
 				<ol class="breadcrumb float-sm-end">
-					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item"><a asp-action="AdminPage" asp-controller="Admin">Home</a></li>
 					<li class="breadcrumb-item active" aria-current="page">
-						Movie Table
+						Movie List
 					</li>
 				</ol>
 			</div>
 		</div> <!--end::Row-->
 	</div> <!--end::Container-->
 </div>
-<div class="app-content">
-	<!--begin::Container-->
-	<div class="container-fluid">
-		<!-- Info boxes -->
-		<div class="row">
-			<div class="panel panel-default">
-				@* <div class="panel-heading"> *@
-				@* 	Movie Table *@
-				@* </div> *@
-				<div class="panel-body">
-					<a asp-action="Create"><button type="button" class="btn btn-success mb-1">Create New</button></a>
-					<div class="table-responsive">
+
+<hr />
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h3>Movies List</h3>
+				<a asp-action="Create"><button type="button" class="btn btn-success mb-1">Create New</button></a>
+				<div class="table-responsive">
+					@* <form asp-action="Index" role="form" method="get" class="form-inline"> *@
+					@* 	Search Movie <input type="text" name="txtSearch" value="" /> *@
+					@* 	<button type="submit" class="btn btn-primary">Search</button> *@
+					@* </form> *@
+					
+					<!--Phân trang-->
+					<div class="card-header">
+						<div class="card-tools">
+							@Html.PagedListPager(Model, page => Url.Action("Index", "MovieManagement", new { page = page }),
+																new PagedListRenderOptions
+							{
+								LiElementClasses = new string[] { "page-item" },
+								PageClasses = new string[] { "page-link" }
+							})
+						</div>
+					</div>
+					<div class="card-body p-0">
 						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+							<select name="genreId" asp-items="@ViewData["GenreId"] as SelectList" onchange="filterMoviesByGenre(this.value)">
+							</select>
 							<thead>
 								<tr>
-									<th width="110px">@Html.DisplayNameFor(model => model.Url)</th>
-									<th width="200px">@Html.DisplayNameFor(model => model.Title)</th>
-									<th width="150px">@Html.DisplayNameFor(model => model.UpdatedAt)</th>
-									<th width="150px">@Html.DisplayNameFor(model => model.CreatedAt)</th>
+									<th width="110px">@Html.DisplayNameFor(model => model.First().Url)</th>
+									<!--First() để xóa lỗi -->
+									<th width="200px">@Html.DisplayNameFor(model => model.First().Title)</th>
+									<th width="150px">@Html.DisplayNameFor(model => model.First().UpdatedAt)</th>
+									<th width="150px">@Html.DisplayNameFor(model => model.First().CreatedAt)</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -80,5 +98,11 @@
 		$(document).ready(function () {
 			$('#dataTables-example').dataTable();
 		});
+	</script>
+
+	<script>
+		function filterMoviesByGenre(genreId) {
+			window.location.href = '/MovieManagement/FilterByGenre?genreId=' + genreId;
+		}
 	</script>
 }

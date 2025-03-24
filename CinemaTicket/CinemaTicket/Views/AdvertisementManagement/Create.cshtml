@@ -1,0 +1,85 @@
+﻿        @model CinemaTicket.Data.Advertisement
+        @{
+            Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+        }
+
+        <h3>Create Advertisement</h3>
+
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Chọn phim -->
+            <div class="form-group">
+                <label asp-for="MovieId" class="control-label">Select Movie</label>
+                <select asp-for="MovieId" class="form-control">
+                    @foreach (var movie in ViewBag.Movies)
+                    {
+                         <option value="@movie.MovieId">@movie.Title</option>
+                    }
+                </select>
+                <span asp-validation-for="MovieId" class="text-danger"></span>
+            </div>
+
+            <!-- Tải lên hình ảnh -->
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label">Upload Banner</label>
+                 <input id="fileInput" type="file" name="file" class="form-control" required />
+                <img id="imagePreview" src="~/images/@Model.ImageUrl"
+                     style="display: @(string.IsNullOrEmpty(Model.ImageUrl) ? "none" : "block");
+                            width: 200px; border: solid black 2px;" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+
+            <!-- Ngày bắt đầu -->
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" type="date" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+
+            <!-- Ngày kết thúc -->
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" type="date" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="form-group">
+                <label asp-for="IsActive" class="control-label">Status</label>
+                <select asp-for="IsActive" class="form-control">
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+                <span asp-validation-for="IsActive" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+
+        @section Scripts {
+            <script>
+                document.getElementById('fileInput').addEventListener('change', function (event) {
+                    const file = event.target.files[0];
+                    const imagePreview = document.getElementById('imagePreview');
+
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            imagePreview.src = e.target.result;
+                            imagePreview.style.display = 'block';
+                        }
+                        reader.readAsDataURL(file);
+                    } else {
+                        imagePreview.src = '';
+                        imagePreview.style.display = 'none';
+                    }
+                });
+            </script>
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }

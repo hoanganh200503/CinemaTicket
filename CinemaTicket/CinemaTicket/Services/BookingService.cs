@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using CinemaTicket.Data;
+using CinemaTicket.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CinemaTicket.Services
@@ -17,11 +18,11 @@ namespace CinemaTicket.Services
 
         public async Task<decimal> GetSeatPrice(int seatId)
         {
-            var seat = await _context.Seats.Include(s => s.SeatTypeNavigation)
+            var seat = await _context.Seats.Include(s => s.SeatType)
                                            .FirstOrDefaultAsync(s => s.SeatId == seatId);
             if (seat == null) throw new Exception("Seat not found.");
 
-            return seat.SeatTypeNavigation.Price;
+            return seat.SeatType.Price;
         }
 
         public async Task<bool> PurchaseTicket(int customerId, int seatId, int showtimeId, string paymentMethod)

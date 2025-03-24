@@ -120,6 +120,7 @@ namespace CinemaTicket.Controllers
             HttpContext.Session.SetString("UserName", customer.Name);
             HttpContext.Session.SetString("UserRole", customer.Role);
 
+
             if (customer.Role == "Admin")
             {
                 return RedirectToAction("AdminPage", "Admin", new { area = "Admin" });

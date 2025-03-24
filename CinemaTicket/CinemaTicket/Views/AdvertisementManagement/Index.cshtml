@@ -1,0 +1,117 @@
+﻿@model IEnumerable<CinemaTicket.Data.Advertisement>
+@{
+	Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<!--begin::App Content Header-->
+<div class="app-content-header">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!--begin::Row-->
+		<div class="row">
+			<div class="col-sm-6">
+				<h3 class="mb-0">Banner Management</h3>
+			</div>
+			<div class="col-sm-6">
+				<ol class="breadcrumb float-sm-end">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active" aria-current="page">
+						
+					</li>
+				</ol>
+			</div>
+		</div> <!--end::Row-->
+	</div> <!--end::Container-->
+</div>
+<div class="app-content">
+	<!--begin::Container-->
+	<div class="container-fluid">
+		<!-- Info boxes -->
+		<div class="row">
+			<div class="panel panel-default">
+				@* <div class="panel-heading"> *@
+				@* 	Banner Table *@
+				@* </div> *@
+				<div class="panel-body">
+					<a asp-action="Create"><button type="button" class="btn btn-success mb-1">Create New</button></a>
+					<div class="table-responsive">
+						<table class="table table-striped table-bordered table-hover" id="dataTables-example">
+							<thead>
+								<tr>
+									<th style="width: 5%;" >@Html.DisplayNameFor(model => model.Id)</th>
+									<th style="width: 15%;" >@Html.DisplayNameFor(model => model.Movie.Title)</th>
+									<th style="width: 15%;" >@Html.DisplayNameFor(model => model.ImageUrl)</th>
+									<th style="width: 15%;">@Html.DisplayNameFor(model => model.StartDate)</th>
+									<th style="width: 15%;">@Html.DisplayNameFor(model => model.EndDate)</th>
+									<th style="width: 10%;">@Html.DisplayNameFor(model => model.IsActive)</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach (var item in Model)
+								{
+									<tr class="">
+										<td>@Html.DisplayFor(modelItem => item.Id)</td>
+										<td>@Html.DisplayFor(modelItem => item.Movie.Title)</td>
+										<td>
+											<img width="100" src="~/images/@Html.DisplayFor(modelItem => item.ImageUrl)" alt="Banner"
+												 onerror="this.src='/images/movie-placeholder.jpg'">
+										</td>
+										<td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+										<td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+										<td >@Html.DisplayFor(modelItem => item.IsActive)</td>
+										<td>
+
+											<a asp-action="Edit" asp-route-id="@item.Id"><Button type="button" class="btn btn-warning mb-1">Edit</Button></a> |
+											<a asp-action="Details" asp-route-id="@item.Id"><Button tpye="button" class="btn btn-info mb-1">Details</Button></a> |
+											<a asp-action="Delete" asp-route-id="@item.Id"><Button type="button" class="btn btn-danger mb-1">Delete</Button></a>
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--End Advanced Tables -->
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			var bannerTable = $('#dataTables-example').DataTable({
+				paging: true, // Bật phân trang
+				searching: true, // Bật tìm kiếm
+				ordering: true, // Cho phép sắp xếp
+				info: true, // Hiển thị thông tin tổng số bản ghi
+				responsive: true,
+				columns: [
+					{ searchable: true },  // ID
+					{ searchable: true },  // Movie Title
+					{ searchable: false }, // ImageUrl
+					{ searchable: false }, // StartDate
+					{ searchable: false }, // EndDate
+					{ searchable: false }, // IsActive
+					{ searchable: false }  // Actions
+				]
+			});
+		});
+		ript>
+		$(document).ready(function () {
+			$('#dataTables-example').DataTable({
+				paging: true,
+				searching: true,
+				ordering: true,
+				info: true,
+				autoWidth: false, // Tránh lỗi kéo dài cột
+				columnDefs: [
+					{ targets: 2, orderable: false }, // Không sắp xếp cột Image
+					{ targets: 5, orderable: false }, // Không sắp xếp cột IsActive
+					{ targets: 6, orderable: false }  // Không sắp xếp cột Actions
+				]
+			});
+		});
+	</script>
+}

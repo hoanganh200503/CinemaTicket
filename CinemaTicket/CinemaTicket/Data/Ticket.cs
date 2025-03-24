@@ -27,8 +27,6 @@ public partial class Ticket
 
     public virtual Customer Customer { get; set; } = null!;
 
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
-
     public virtual Seat Seat { get; set; } = null!;
 
     public virtual Showtime Showtime { get; set; } = null!;

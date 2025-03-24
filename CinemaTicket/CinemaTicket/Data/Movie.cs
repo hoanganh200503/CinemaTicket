@@ -24,6 +24,8 @@ public partial class Movie
 
     [DisplayName("Poster")]
     public string? Url { get; set; }
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public virtual ICollection<Advertisement> Advertisements { get; set; } = new List<Advertisement>();
 
     public virtual ICollection<Showtime> Showtimes { get; set; } = new List<Showtime>();
     [DisplayName("Genre")]

@@ -6,8 +6,9 @@ namespace CinemaTicket.Data;
 public partial class Review
 {
     public int ReviewId { get; set; }
-
-    public int TicketId { get; set; }
+    public int MovieId { get; set; }
+    public int CustomerId { get; set; }
+    public string IsApproved { get; set; } = null!;
 
     public int Rating { get; set; }
 
@@ -17,5 +18,7 @@ public partial class Review
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual Ticket Ticket { get; set; } = null!;
+    //  public virtual Ticket Ticket { get; set; } = null!; không liên kết khóa ngoại trong db được nên xóa
+    public virtual Movie Movie { get; set; } = null!;
+    public virtual Customer Customer { get; set; } = null!;
 }

@@ -36,7 +36,10 @@
 							<p class="card-text">Thời lượng: @movie.Duration phút</p>
 							<p class="card-text">
 								<small class="text-muted">
-									Thể loại: @string.Join(", ", movie.MovieGenreMappings.Select(g => g.GenreName))
+									Thể loại: @string.Join(", ", movie.MovieGenreMappings?
+														.Where(g => g.MovieGenre != null)  // Kiểm tra nếu g.MovieGenre không null
+														.Select(g => g.MovieGenre.GenreName) ?? new List<string>())
+									<!--Sửa g.MovieGenre.GenreName-->
 								</small>
 							</p>
 							<p class="card-text">

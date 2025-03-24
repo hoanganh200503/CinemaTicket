@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CinemaTicket.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using CinemaTicket.Data;
+using X.PagedList.Extensions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CinemaTicket.Controllers
 {
@@ -16,11 +18,54 @@ namespace CinemaTicket.Controllers
         }
 
         // GET: MoviemanagementController
-        public async Task<IActionResult> Index()
+        public IActionResult Index(  string? txtSearch, int? genreId,int page = 1)
+        {   
+                     page = page < 1 ? 1 : page;
+            int pageSize = 6;
+
+            var movies = _context.Movies.AsQueryable(); // Sử dụng AsQueryable để trì hoãn việc lấy dữ liệu
+
+            if (!string.IsNullOrEmpty(txtSearch))
+            {
+                movies = movies.Where(m => m.Title.ToLower().Contains(txtSearch.ToLower())); // Tìm kiếm không phân biệt chữ hoa chữ thường
+            }
+
+            var pagedMovies = movies.ToPagedList(page, pageSize); // Phân trang kết quả
+
+// Truyền danh sách thể loại vào ViewData để hiển thị dropdown list
+            var genres = _context.MovieGenres.ToList();
+            genres.Insert(0, new MovieGenre { GenreId = 0, GenreName = "--Choose Genre--" });
+            ViewData["GenreId"] = new SelectList(genres, "GenreId", "GenreName", genreId);
+
+            return View(pagedMovies);
+        }
+
+        public IActionResult FilterByGenre(int? genreId, int page = 1)
         {
-            var movie = await _context.Movies
-                 .ToListAsync();
-            return View(movie);
+            genreId = genreId ?? 0;
+            var genres = _context.MovieGenres.ToList();
+            //GenreId GenreName
+            genres.Insert(0, new MovieGenre { GenreId = 0, GenreName = "--Choose Genre--" });
+            ViewData["GenreId"] = new SelectList(genres, "GenreId", "GenreName", genreId);
+            List<Movie> movies; // Khai báo movies là List<Movie>
+            if (genreId == 0) // Nếu chọn "--Choose Genre--", lấy tất cả phim
+            {
+                movies = _context.Movies
+                    .Include(mg => mg.MovieGenreMappings)
+                    .ThenInclude(mg => mg.MovieGenre)
+                    .ToList();
+            }
+            else // Lấy phim theo genreId
+            {
+                movies = _context.Movies
+                    .Include(mg => mg.MovieGenreMappings)
+                    .ThenInclude(mg => mg.MovieGenre)
+                    .Where(m => m.MovieGenreMappings.Any(mgm => mgm.GenreId == genreId))
+                    .ToList();
+            }
+            int pageSize = 6; // Đặt số lượng phim trên một trang
+            var pagedMovies = movies.ToPagedList(page, pageSize); // Chuyển đổi List<Movie> thành IPagedList<Movie>
+            return View("Index", pagedMovies);
         }
 
         // GET: Movie/Details/5
@@ -33,7 +78,7 @@ namespace CinemaTicket.Controllers
             // Lấy Movie dựa trên MovieId và load các Genres liên quan thông qua MovieGenreMappings
             var movie = await _context.Movies
                 .Include(m => m.MovieGenreMappings)
-                    .ThenInclude(mgm => mgm.Genre)
+                    .ThenInclude(mgm => mgm.MovieGenre)
                 .FirstOrDefaultAsync(m => m.MovieId == id);
 
             return View(movie);
@@ -78,6 +123,19 @@ namespace CinemaTicket.Controllers
                 {
                     movie.Url = "AIsol.jpg"; // Đặt ảnh mặc định
                 }// Nếu không có file mới và Url cũ trống
+                var existingMovie = await _context.Movies.FirstOrDefaultAsync(m => m.Title == movie.Title);
+                if (existingMovie != null)
+                {
+                    ModelState.AddModelError("Title", "Movie is exixted!");
+                    ViewBag.Genres = await _context.MovieGenres.ToListAsync();
+                    return View(movie);
+                }
+                if (movie.Duration <= 0)
+                {
+                    ModelState.AddModelError("Duration", "The duration appcept positive only!");
+                    ViewBag.Genres = await _context.MovieGenres.ToListAsync();
+                    return View(movie);
+                }
 
                 movie.CreatedAt = DateTime.Now;
                 movie.UpdatedAt = DateTime.Now;
@@ -115,8 +173,7 @@ namespace CinemaTicket.Controllers
             }
             var movie = await _context.Movies
                 .Include(mpg => mpg.MovieGenreMappings)
-                .ThenInclude(g => g.Genre)
-                      .FirstAsync(m => m.MovieId == id);
+                      .FirstOrDefaultAsync(m => m.MovieId == id);
 
             if (movie == null)
             {
@@ -227,7 +284,9 @@ namespace CinemaTicket.Controllers
             }
 
             var movie = await _context.Movies
-                .FirstOrDefaultAsync(m => m.MovieId == id);
+             .Include(m => m.MovieGenreMappings)
+                 .ThenInclude(mgm => mgm.MovieGenre)
+             .FirstOrDefaultAsync(m => m.MovieId == id);
             if (movie == null)
             {
                 return NotFound();

@@ -1,9 +1,9 @@
 using System.Diagnostics;
-using CinemaTicket.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CinemaTicket.Data;
 using System.Linq;
+using System.Reflection;
 
 namespace CinemaTicket.Controllers
 {
@@ -25,6 +25,7 @@ namespace CinemaTicket.Controllers
                 var today = DateOnly.FromDateTime(DateTime.Today);
                 var movies = await _context.Movies
                     .Include(m => m.MovieGenreMappings)
+                    .ThenInclude(g => g.MovieGenre)
                     .Where(m => m.ReleaseDate <= today)
                     .OrderByDescending(m => m.ReleaseDate)
                     .Take(8)  // Chỉ lấy 8 phim mới nhất
@@ -36,6 +37,11 @@ namespace CinemaTicket.Controllers
                     .Distinct()
                     .OrderBy(g => g)
                     .ToListAsync();
+
+                var advertisements = _context.Advertisements.ToList(); // Lấy danh sách quảng cáo từ DB
+                ViewBag.Advertisements = advertisements; // Truyền vào ViewBag
+
+
 
                 ViewBag.Genres = genres;
                 ViewBag.MovieType = "now-showing";
@@ -95,7 +101,11 @@ namespace CinemaTicket.Controllers
         {
             try
             {
-                var query = _context.Movies.Include(m => m.MovieGenreMappings).AsQueryable();
+                var query = _context.Movies
+                .Include(m => m.MovieGenreMappings)
+                .ThenInclude(g => g.MovieGenre)
+                .AsQueryable();
+
 
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
@@ -104,7 +114,7 @@ namespace CinemaTicket.Controllers
 
                 if (!string.IsNullOrEmpty(genre))
                 {
-                    query = query.Where(m => m.MovieGenreMappings.Any(g => g.GenreName == genre));
+                    query = query.Where(m => m.MovieGenreMappings.Any(g => g.MovieGenre.GenreName == genre)); //g.MovieGenre.GenreName đẻ trỏ tới genreName trong bảng MovieGenre
                 }
 
                 var movies = await query.ToListAsync();
@@ -129,6 +139,8 @@ namespace CinemaTicket.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+
 
         public IActionResult Privacy()
         {
